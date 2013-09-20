@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>index</title>
+        
+    <script type="text/javascript">
+        function connect() {
+            var socket = navigator.mozTCPSocket.open('192.168.43.223', 8000);
+            socket.onopen = function() {
+                socket.send('GET / HTTP/1.1\r\n\r\n');
+            }
+            socket.ondata = function(event) {
+                alert(event.data);
+            }
+        }
+    </script>
+        
+    </head>
+    <body>
+        <h1>Hello World!</h1>
+        <a href="javascript:connect();">Connect</a>
+    </body>
+</html>

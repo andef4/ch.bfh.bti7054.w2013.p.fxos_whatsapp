@@ -1,0 +1,11 @@
+{
+  "name": "TCPSocket Example",
+  "description": "A Firefox OS Example App showing the TCPSocket API",
+  "launch_path": "/index.html",
+  "type": "privileged",
+  "permissions": {
+    "tcp-socket": {
+      "description": "Network Access"
+    }
+  }
+}
