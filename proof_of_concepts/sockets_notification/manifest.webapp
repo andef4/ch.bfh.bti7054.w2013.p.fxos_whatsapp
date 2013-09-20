@@ -1,0 +1,13 @@
+{
+  "name": "TCPSocket Example with Notifications",
+  "description": "A Firefox OS Example App showing the TCPSocket and Notifications API",
+  "launch_path": "/index.html",
+  "type": "privileged",
+  "permissions": {
+    "tcp-socket": {
+      "description": "Network Access"
+    },
+    "desktop-notification": {
+    }
+  }
+}
