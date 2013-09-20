@@ -10,6 +10,7 @@ Firefox OS APIs
 ---------------
 * Pull Request for Background Workers: https://github.com/mozilla-b2g/gaia/pull/1929
 * TCP Socket API: https://developer.mozilla.org/en-US/docs/WebAPI/TCP_Socket
+* Notifications: http://stackoverflow.com/questions/15524817/how-to-implement-notification-in-firefox-os
 
 Convert/Run Python on Javascript VM
 -----------------------------------
