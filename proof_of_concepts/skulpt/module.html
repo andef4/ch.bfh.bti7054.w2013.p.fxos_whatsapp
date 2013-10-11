@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>hello_world</title>
+        <script type="text/javascript" src="../../skulpt/dist/skulpt.js"></script>
+        <script type="text/javascript" src="../../skulpt/dist/skulpt-stdlib.js"></script>
+        <script type="text/javascript">
+        function outf(text) {
+            var output = document.getElementById("output");
+            output.innerHTML = output.innerHTML + text;
+        }
+        function builtinRead(x) {
+            if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) {
+                throw "File not found: '" + x + "'";
+            }
+            return Sk.builtinFiles["files"][x];
+        }
+        function run() {
+            Sk.configure({output: outf, read: builtinRead});
+            eval(Sk.importMainWithBody("<stdin>", false, "import socket; socket.execute()"));
+        }
+        </script>
+    </head>
+    <body>
+        <pre id="output"></pre>
+        <button onclick="run();">Run</button>
+    </body>
+</html>
