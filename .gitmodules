@@ -1,0 +1,6 @@
+[submodule "skulpt-fxos"]
+	path = skulpt-fxos
+	url = https://github.com/andef4/skulpt-fxos.git
+[submodule "yowsup-fxos"]
+	path = yowsup-fxos
+	url = https://github.com/andef4/yowsup-fxos.git
