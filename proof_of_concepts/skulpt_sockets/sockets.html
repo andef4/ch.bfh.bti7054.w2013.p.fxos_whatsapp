@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>hello_world</title>
+        <script type="text/javascript" src="../../skulpt/dist/skulpt.js"></script>
+        <script type="text/javascript" src="../../skulpt/dist/skulpt-stdlib.js"></script>
+        <script type="text/javascript">
+        function outf(text) {
+            var output = document.getElementById("output");
+            output.innerHTML = output.innerHTML + text;
+        }
+        function builtinRead(x) {
+            if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) {
+                throw "File not found: '" + x + "'";
+            }
+            return Sk.builtinFiles["files"][x];
+        }
+        function run() {
+            Sk.configure({output: outf, read: builtinRead});
+            var code = document.getElementById("input").innerHTML;
+            eval(Sk.importMainWithBody("<stdin>", false, code));
+        }
+        </script>
+    </head>
+    <body>
+        
+        <textarea id="input" rows="40" cols="200">
+import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+s.connect(('localhost', 8000))
+
+s.send('hello')
+
+while True:
+    d = s.recv(1024)
+    print d
+    s.send(d)
+        </textarea>
+        
+        
+        <pre id="output"></pre>
+        <button onclick="run();">Run</button>
+    </body>
+</html>

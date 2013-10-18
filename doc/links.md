@@ -2,9 +2,12 @@ Inofficial WhatsApp implementations
 -----------------------------------
 * OpenWhatsapp Homepage: http://openwhatsapp.org
 * OpenWhatsapp GitHub: https://github.com/tgalal?tab=repositories
+* yowsup fork with working passwords: https://github.com/CODeRUS/yowsup
+* Request WhatsApp Password: http://coderus.openrepos.net/whitesoft/whatsapp_sms
 * Whatsapp Python Library: https://github.com/tgalal/yowsup
 * Whatsapp PHP Library: https://github.com/venomous0x/WhatsAPI
 * Whatsapp C# Library: https://code.google.com/p/whatsapp-desktop-client/
+* https://github.com/koenk/whatspoke
 
 Firefox OS APIs
 ---------------
