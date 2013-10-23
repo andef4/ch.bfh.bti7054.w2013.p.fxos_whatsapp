@@ -10,50 +10,83 @@ module WA {
     }
     
     export class Stream {
-        start() {
-            var streamOpenAttributes = {to: Constants.domain, resource: Constants.tokenData["r"]};
-            packet = 'WA\01\02' + this.listStart(5) + this.writeInt8(1) + this.writeAttributes(streamOpenAttributes);
-            return packet
+        private packet: number[] = [];
+        start(): void {
+            // protocol start
+            this.writeString("WA");
+            this.writeInt8(1);
+            this.writeInt8(2);
+            
+            // 00 00 12     f8 05
+            this.writeInt8(0);
+            this.writeInt8(0);
+            this.writeInt8(18);
+            
+            // send stream attributes
+            this.listStart(5);
+            this.writeInt8(1);
+            
+            this.writeString("to");
+            this.writeString(Constants.domain);
+            this.writeString("resource");
+            this.writeString(Constants.tokenData["r"]);
+            
+            //var streamOpenAttributes = {to: Constants.domain, resource: Constants.tokenData["r"]};
+            //this.writeAttributes(streamOpenAttributes);
+        }
+        
+        getPacket(): Uint8Array {
+            var array = new Uint8Array(this.packet.length);
+            for(var i = 0; i < this.packet.length; i++) {
+                array[i] = this.packet[i];
+            }
+            return array;
         }
         
         // high level encoding methods
-        private listStart(listLength: number) {
+        private listStart(listLength: number): void {
             if (listLength == 0) {
-                return this.writeInt8(0);
+                this.writeInt8(0);
             } else if (listLength < 256) {
-                return this.writeInt8(248) + this.writeInt8(listLength);
+                this.writeInt8(248);
+                this.writeInt8(listLength);
             } else {
-                return this.writeInt8(249) + this.writeInt16(listLength);
+                this.writeInt8(249)
+                this.writeInt16(listLength);
             }
-            return "";
         }
         
-        private writeAttributes(attributes: Object) {
-            // TODO
-            return "";
+        private writeAttributes(attributes: Object): void {
+            for(var key in attributes) {
+                this.writeString(key);
+                this.writeString(attributes[key]);
+            }
         }
 
         // low level encoding methods
-        private writeInt8(value: number) {
-            // TODO
-            return "";
+        private writeInt8(value: number): void {
+            if (value > 255 || value < 0) {
+                throw "Bad value for writeInt8";
+            }
+            this.packet.push(value);
         }
         
-        private writeInt16(value: number) {
-            // TODO
-            return "";
+        private writeInt16(value: number): void {
+            if (value > 65535 || value < 0) {
+                throw "Bad value for writeInt16";
+            }
         }
         
-        private writeString(value: string) {
-            // TODO
-            return "";
+        private writeString(value: string): void {
+            for(var i = 0; i < value.length; i++) {
+                this.packet.push(value.charCodeAt(i));
+            }
         }
         
-        private 
     }
 }
 
-function encode(packet: string) {
+/*function encode(packet: string) {
     console.log(packet);
 }
 
@@ -75,10 +108,20 @@ var packet = '<stream:features>' +
 encode(packet);
 
 var stream = new WA.Stream();
+*/
 
 
+var stream = new WA.Stream();
+stream.start();
+var packet = stream.getPacket();
+var str: string = "";
+for(var i = 0; i < packet.length; i++) {
+    var c = packet[i].toString(16);
+    if (c.length == 1) {
+        str += "0";
+    }
+    str += c;
+    str += " ";
+}
 
-
-
-
-
+document.getElementById("content").innerHTML = str;
