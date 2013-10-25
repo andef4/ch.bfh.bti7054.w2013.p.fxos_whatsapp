@@ -1,4 +1,4 @@
-module WA {
+module WA.Network {
     export class Stream {
         private packet: number[] = [];
         
@@ -26,9 +26,6 @@ module WA {
             this.writeInt8(0x0A);
             
             this.writeString(Constants.TOKEN_DATA["r"]);
-            
-            //var streamOpenAttributes = {to: Constants.domain, resource: Constants.tokenData["r"]};
-            //this.writeAttributes(streamOpenAttributes);
         }
         
         getPacket(): Uint8Array {
@@ -39,7 +36,45 @@ module WA {
             return array;
         }
         
+        
+        
         // high level encoding methods
+        
+        /*
+            def writeInternal(self,node):
+        '''define write internal here'''
+        
+        self.writeListStart(1 + (0 if node.attributes is None else len(node.attributes) * 2) + (0 if node.children is None else 1) + (0 if node.data is None else 1));
+        
+        self.writeString(node.tag);
+        self.writeAttributes(node.attributes);
+        
+        if node.data is not None:
+            self.writeBytes(node.data)
+            '''if type(node.data) == bytearray:
+                self.writeBytes(node.data);
+            else:
+                self.writeBytes(bytearray(node.data));
+            '''
+        
+        if node.children is not None:
+            self.writeListStart(len(node.children));
+            for c in node.children:
+                self.writeInternal(c);
+        */
+        sendBinaryXml(rootNode: WA.XML.Node) {
+            var length = 1;
+            length += Object.keys(rootNode.attrs).length * 2;
+            if (rootNode.childs.length) {
+                length =+ 1;
+            }
+            this.listStart(length);
+            this.writeString(rootNode.name);
+            this.writeAttributes(rootNode.attrs);
+            // TODO handle node data
+            // TODO handle children
+        }
+        
         private listStart(listLength: number): void {
             if (listLength == 0) {
                 this.writeInt8(Constants.LIST_EMPTY);
@@ -73,27 +108,6 @@ module WA {
             }
         }
         
-        /*
-        def writeString(self,tag):
-        try:
-            key = self.tokenMap[tag];
-            self.writeToken(key);
-        except KeyError:
-            try:
-                at = '@'.encode() if type(tag) == bytes else '@'
-                atIndex = tag.index(at);
-
-                if atIndex < 1:
-                    raise ValueError("atIndex < 1");
-                else:
-                    server = tag[atIndex+1:];
-                    user = tag[0:atIndex];
-                    #Utilities.debug("GOT "+user+"@"+server);
-                    self.writeJid(user, server);
-
-            except ValueError:
-                self.writeBytes(self.encodeString(tag));
-        */
         private writeString(value: string): void {
             var index = Constants.DICTIONARY.indexOf(value);
             if (index < 0) {
@@ -125,7 +139,8 @@ module WA {
 
 
 
-var packet = '<stream:features>' +
+var packet = 
+'<stream:features>' +
     '<receipt_acks>' +
     '</receipt_acks>' +
     '<w:profile:picture type="all">' +
@@ -136,7 +151,7 @@ var packet = '<stream:features>' +
     '</notification>' +
     '<status>' +
     '</status>' +
-    '</stream:features>'
+'</stream:features>'
 
 encode(packet);
 
@@ -144,8 +159,19 @@ var stream = new WA.Stream();
 */
 
 
-var stream = new WA.Stream();
+var stream = new WA.Network.Stream();
 stream.start();
+
+
+var features = new WA.XML.Node("stream:features", {}, [
+    new WA.XML.Node("receipt_acks"),
+    new WA.XML.Node("w:profile:picture", {type: "all"}),
+    new WA.XML.Node("w:profile:picture", {type: "group"}),
+    new WA.XML.Node("notification", {type: "participant"}),
+    new WA.XML.Node("status"),
+]);
+
+
 var packet = stream.getPacket();
 var str: string = "";
 for(var i = 0; i < packet.length; i++) {
