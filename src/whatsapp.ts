@@ -1,16 +1,7 @@
 module WA {
-    class WhatsApp {
-        port: number;
-        host: string;
-        
-        constructor() {
-            this.port = 443;
-            this.host = 'c2.whatsapp.net';
-        }
-    }
-    
     export class Stream {
         private packet: number[] = [];
+        
         start(): void {
             // protocol start
             this.writeString("WA");
@@ -27,9 +18,9 @@ module WA {
             this.writeInt8(1);
             
             this.writeString("to");
-            this.writeString(Constants.domain);
+            this.writeString(Constants.DOMAIN);
             this.writeString("resource");
-            this.writeString(Constants.tokenData["r"]);
+            this.writeString(Constants.TOKEN_DATA["r"]);
             
             //var streamOpenAttributes = {to: Constants.domain, resource: Constants.tokenData["r"]};
             //this.writeAttributes(streamOpenAttributes);
@@ -46,12 +37,12 @@ module WA {
         // high level encoding methods
         private listStart(listLength: number): void {
             if (listLength == 0) {
-                this.writeInt8(0);
+                this.writeInt8(Constants.LIST_EMPTY);
             } else if (listLength < 256) {
-                this.writeInt8(248);
+                this.writeInt8(Constants.LIST_8);
                 this.writeInt8(listLength);
             } else {
-                this.writeInt8(249)
+                this.writeInt8(Constants.LIST_16)
                 this.writeInt16(listLength);
             }
         }
@@ -77,12 +68,49 @@ module WA {
             }
         }
         
+        /*
+        def writeString(self,tag):
+        try:
+            key = self.tokenMap[tag];
+            self.writeToken(key);
+        except KeyError:
+            try:
+                at = '@'.encode() if type(tag) == bytes else '@'
+                atIndex = tag.index(at);
+
+                if atIndex < 1:
+                    raise ValueError("atIndex < 1");
+                else:
+                    server = tag[atIndex+1:];
+                    user = tag[0:atIndex];
+                    #Utilities.debug("GOT "+user+"@"+server);
+                    self.writeJid(user, server);
+
+            except ValueError:
+                self.writeBytes(self.encodeString(tag));
+        */
         private writeString(value: string): void {
-            for(var i = 0; i < value.length; i++) {
-                this.packet.push(value.charCodeAt(i));
+            var index = Constants.DICTIONARY.indexOf(value);
+            if (index < 0) {
+                if (value.indexOf('@') > 0) {
+                    this.writeJID(value);
+                } else {
+                    for(var i = 0; i < value.length; i++) {
+                        this.packet.push(value.charCodeAt(i));
+                    }
+                }
+            }
+            else if (index < 245) {
+                this.writeInt8(index);
+            } else {
+                this.writeInt8(Constants.TOKEN_8);
+                this.writeInt8(index - 245);
             }
         }
         
+        private writeJID(jid: string): void {
+            
+        }
     }
 }
 

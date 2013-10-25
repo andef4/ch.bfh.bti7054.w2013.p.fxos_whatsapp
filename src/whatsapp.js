@@ -1,13 +1,5 @@
 var WA;
 (function (WA) {
-    var WhatsApp = (function () {
-        function WhatsApp() {
-            this.port = 443;
-            this.host = 'c2.whatsapp.net';
-        }
-        return WhatsApp;
-    })();
-
     var Stream = (function () {
         function Stream() {
             this.packet = [];
@@ -24,10 +16,12 @@ var WA;
             this.listStart(5);
             this.writeInt8(1);
 
+            alert(WA.Constants.DICTIONARY.indexOf("resource").toString(16));
+
             this.writeString("to");
-            this.writeString(WA.Constants.domain);
+            this.writeString(WA.Constants.DOMAIN);
             this.writeString("resource");
-            this.writeString(WA.Constants.tokenData["r"]);
+            this.writeString(WA.Constants.TOKEN_DATA["r"]);
         };
 
         Stream.prototype.getPacket = function () {
@@ -40,12 +34,12 @@ var WA;
 
         Stream.prototype.listStart = function (listLength) {
             if (listLength == 0) {
-                this.writeInt8(0);
+                this.writeInt8(WA.Constants.LIST_EMPTY);
             } else if (listLength < 256) {
-                this.writeInt8(248);
+                this.writeInt8(WA.Constants.LIST_8);
                 this.writeInt8(listLength);
             } else {
-                this.writeInt8(249);
+                this.writeInt8(WA.Constants.LIST_16);
                 this.writeInt16(listLength);
             }
         };
@@ -71,9 +65,24 @@ var WA;
         };
 
         Stream.prototype.writeString = function (value) {
-            for (var i = 0; i < value.length; i++) {
-                this.packet.push(value.charCodeAt(i));
+            var index = WA.Constants.DICTIONARY.indexOf(value);
+            if (index < 0) {
+                if (value.indexOf('@') > 0) {
+                    this.writeJID(value);
+                } else {
+                    for (var i = 0; i < value.length; i++) {
+                        this.packet.push(value.charCodeAt(i));
+                    }
+                }
+            } else if (index < 245) {
+                this.writeInt8(index);
+            } else {
+                this.writeInt8(WA.Constants.TOKEN_8);
+                this.writeInt8(index - 245);
             }
+        };
+
+        Stream.prototype.writeJID = function (jid) {
         };
         return Stream;
     })();
