@@ -8,10 +8,10 @@ module WA {
             this.writeInt8(1);
             this.writeInt8(2);
             
-            // 00 00 12     f8 05
+            // 00 00 12 => no clue what this is....
             this.writeInt8(0);
             this.writeInt8(0);
-            this.writeInt8(18);
+            this.writeInt8(0x12);
             
             // send stream attributes
             this.listStart(5);
@@ -20,6 +20,11 @@ module WA {
             this.writeString("to");
             this.writeString(Constants.DOMAIN);
             this.writeString("resource");
+            
+            // fc 0a => no clue what this is....
+            this.writeInt8(0xFC);
+            this.writeInt8(0x0A);
+            
             this.writeString(Constants.TOKEN_DATA["r"]);
             
             //var streamOpenAttributes = {to: Constants.domain, resource: Constants.tokenData["r"]};

@@ -38,7 +38,5 @@ module WA {
         export var BINARY_8 = 252;
         export var BINARY_24 = 253;
         export var TOKEN_8 = 254;
-    
-        
     }
 }

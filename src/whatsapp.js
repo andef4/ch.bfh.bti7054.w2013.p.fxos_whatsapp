@@ -11,16 +11,18 @@ var WA;
 
             this.writeInt8(0);
             this.writeInt8(0);
-            this.writeInt8(18);
+            this.writeInt8(0x12);
 
             this.listStart(5);
             this.writeInt8(1);
 
-            alert(WA.Constants.DICTIONARY.indexOf("resource").toString(16));
-
             this.writeString("to");
             this.writeString(WA.Constants.DOMAIN);
             this.writeString("resource");
+
+            this.writeInt8(0xFC);
+            this.writeInt8(0x0A);
+
             this.writeString(WA.Constants.TOKEN_DATA["r"]);
         };
 
