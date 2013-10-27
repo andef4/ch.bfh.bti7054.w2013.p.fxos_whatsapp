@@ -12,19 +12,10 @@ module WA.Network {
         
         static streamStartPacket(): Packet {
             var packet = new Packet();
-            // send stream attributes
             packet.listStart(5);
             packet.writeInt8(1);
-            
-            packet.writeString("to");
-            packet.writeString(Constants.DOMAIN);
-            packet.writeString("resource");
-            
-            // fc 0a => no clue what this is....
-            packet.writeInt8(0xFC);
-            packet.writeInt8(0x0A);
-            
-            packet.writeString(Constants.TOKEN_DATA["r"]);
+            var streamAttributes = {to: WA.Constants.DOMAIN, resource: WA.Constants.TOKEN_DATA["r"]};
+            packet.writeAttributes(streamAttributes);
             return packet;
         }
         

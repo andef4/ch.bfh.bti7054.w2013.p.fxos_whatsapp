@@ -72,21 +72,41 @@ module WA.Network {
             this.packet.push(value & 0xFF);
         }
         
+        writeInt24(value: number): void {
+            if (value > 16777216 || value < 0) {
+                throw "Bad value for writeInt16";
+            }
+            this.packet.push((value & 0xFF0000) >> 16);
+            this.packet.push((value & 0xFF00) >> 8);
+            this.packet.push(value & 0xFF);
+        }
+        
+        writeBytes(bytes: string): void {
+            if (bytes.length > 255) {
+                this.writeInt8(WA.Constants.BINARY_24);
+                this.writeInt24(bytes.length);
+            } else {
+                this.writeInt8(WA.Constants.BINARY_8);
+                this.writeInt8(bytes.length);
+            }
+            for(var i = 0; i < bytes.length; i++) {
+                this.packet.push(bytes.charCodeAt(i));
+            }
+        }
+        
         writeString(value: string): void {
             var index = WA.Constants.DICTIONARY.indexOf(value);
             if (index < 0) {
                 if (value.indexOf('@') > 0) {
                     this.writeJID(value);
                 } else {
-                    for(var i = 0; i < value.length; i++) {
-                        this.packet.push(value.charCodeAt(i));
-                    }
+                    this.writeBytes(value);
                 }
             }
             else if (index < 245) {
                 this.writeInt8(index);
             } else {
-                this.writeInt8(Constants.TOKEN_8);
+                this.writeInt8(WA.Constants.TOKEN_8);
                 this.writeInt8(index - 245);
             }
         }

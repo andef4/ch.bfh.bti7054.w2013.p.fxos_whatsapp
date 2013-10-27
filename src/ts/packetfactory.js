@@ -15,18 +15,10 @@ var WA;
 
             PacketFactory.streamStartPacket = function () {
                 var packet = new Network.Packet();
-
                 packet.listStart(5);
                 packet.writeInt8(1);
-
-                packet.writeString("to");
-                packet.writeString(WA.Constants.DOMAIN);
-                packet.writeString("resource");
-
-                packet.writeInt8(0xFC);
-                packet.writeInt8(0x0A);
-
-                packet.writeString(WA.Constants.TOKEN_DATA["r"]);
+                var streamAttributes = { to: WA.Constants.DOMAIN, resource: WA.Constants.TOKEN_DATA["r"] };
+                packet.writeAttributes(streamAttributes);
                 return packet;
             };
 
