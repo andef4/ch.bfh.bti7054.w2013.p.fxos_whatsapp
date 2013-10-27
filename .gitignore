@@ -3,4 +3,5 @@
 /skulpt-dist/
 /skulpt/
 /yowsup/
-
+credentials.js
+credentials.ts

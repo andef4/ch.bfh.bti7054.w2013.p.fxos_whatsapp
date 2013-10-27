@@ -1,7 +1,7 @@
 module WA.Network {
     
     export class Node {
-        constructor(public name: string, public attrs: Object = {}, public childs: Node[] = []) {}
+        constructor(public name: string, public attrs: Object = {}, public childs: Node[] = [], public data: string = null) {}
     }
     
     export class Packet {
@@ -25,11 +25,16 @@ module WA.Network {
             if (node.childs.length) {
                 length += 1;
             }
+            if (node.data != null) {
+                length += 1;
+            }
             this.listStart(length);
             this.writeString(node.name);
             this.writeAttributes(node.attrs);
             
-            // TODO handle node data
+            if (node.data != null) {
+                this.writeBytes(node.data);
+            }
             
             if (node.childs.length) {
                 this.listStart(node.childs.length);

@@ -15,20 +15,9 @@ var WA;
         }
 
         function auth(username, password) {
-            var data = WA.Network.PacketFactory.helloPacket();
+            var packet = WA.Network.PacketFactory.authPacket(username);
+            var data = packet.serialize();
             var str = print(data);
-
-            var packet = WA.Network.PacketFactory.streamStartPacket();
-            data = packet.serialize();
-            str += print(data);
-
-            packet = WA.Network.PacketFactory.featuresPacket();
-            data = packet.serialize();
-            str += print(data);
-
-            packet = WA.Network.PacketFactory.authPacket(username);
-            data = packet.serialize();
-            str += print(data);
 
             document.getElementById("content").innerHTML = str;
         }
@@ -37,4 +26,4 @@ var WA;
     var Auth = WA.Auth;
 })(WA || (WA = {}));
 
-WA.Auth.auth("1234", "1234");
+WA.Auth.auth(wa_username, wa_password);

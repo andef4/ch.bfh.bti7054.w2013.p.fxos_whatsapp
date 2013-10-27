@@ -15,7 +15,7 @@ module WA.Auth {
     }
     
     export function auth(username: string, password: string) {
-        var data = WA.Network.PacketFactory.helloPacket();
+        /*var data = WA.Network.PacketFactory.helloPacket();
         var str = print(data);
         
         var packet = WA.Network.PacketFactory.streamStartPacket();
@@ -25,16 +25,13 @@ module WA.Auth {
         packet = WA.Network.PacketFactory.featuresPacket();
         data = packet.serialize();
         str += print(data);
-        
-        packet = WA.Network.PacketFactory.authPacket(username);
-        data = packet.serialize();
-        str += print(data);
+        */
+        var packet = WA.Network.PacketFactory.authPacket(username);
+        var data = packet.serialize();
+        var str = print(data);
 
         document.getElementById("content").innerHTML = str;
     }
 }
 
-WA.Auth.auth("1234", "1234");
-
-
-
+WA.Auth.auth(wa_username, wa_password);

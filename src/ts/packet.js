@@ -2,12 +2,14 @@ var WA;
 (function (WA) {
     (function (Network) {
         var Node = (function () {
-            function Node(name, attrs, childs) {
+            function Node(name, attrs, childs, data) {
                 if (typeof attrs === "undefined") { attrs = {}; }
                 if (typeof childs === "undefined") { childs = []; }
+                if (typeof data === "undefined") { data = null; }
                 this.name = name;
                 this.attrs = attrs;
                 this.childs = childs;
+                this.data = data;
             }
             return Node;
         })();
@@ -36,9 +38,16 @@ var WA;
                 if (node.childs.length) {
                     length += 1;
                 }
+                if (node.data != null) {
+                    length += 1;
+                }
                 this.listStart(length);
                 this.writeString(node.name);
                 this.writeAttributes(node.attrs);
+
+                if (node.data != null) {
+                    this.writeBytes(node.data);
+                }
 
                 if (node.childs.length) {
                     this.listStart(node.childs.length);

@@ -41,7 +41,7 @@ var WA;
                     user: username,
                     xmlns: "urn:ietf:params:xml:ns:xmpp-sasl",
                     mechanism: "WAUTH-1"
-                });
+                }, [], "");
                 packet.writeBinaryXml(auth);
                 return packet;
             };
