@@ -18,19 +18,23 @@ var WA;
                 this.packet = [];
             }
             Packet.prototype.serialize = function () {
-                var array = new Uint8Array(this.packet.length);
+                var len = this.packet.length;
+                var array = new Uint8Array(len + 3);
+                array[0] = (len & 0xFF0000) >> 16;
+                array[1] = (len & 0xFF00) >> 8;
+                array[2] = (len & 0xFF);
                 for (var i = 0; i < this.packet.length; i++) {
-                    array[i] = this.packet[i];
+                    array[i + 3] = this.packet[i];
                 }
                 return array;
             };
 
-            Packet.prototype.sendBinaryXml = function (node) {
+            Packet.prototype.writeBinaryXml = function (node) {
                 var _this = this;
                 var length = 1;
                 length += Object.keys(node.attrs).length * 2;
                 if (node.childs.length) {
-                    length = +1;
+                    length += 1;
                 }
                 this.listStart(length);
                 this.writeString(node.name);
@@ -39,7 +43,7 @@ var WA;
                 if (node.childs.length) {
                     this.listStart(node.childs.length);
                     node.childs.forEach(function (child) {
-                        return _this.sendBinaryXml(child);
+                        return _this.writeBinaryXml(child);
                     });
                 }
             };
@@ -74,6 +78,8 @@ var WA;
                 if (value > 65535 || value < 0) {
                     throw "Bad value for writeInt16";
                 }
+                this.packet.push((value & 0xFF00) >> 8);
+                this.packet.push(value & 0xFF);
             };
 
             Packet.prototype.writeString = function (value) {
