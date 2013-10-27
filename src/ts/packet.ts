@@ -1,34 +1,15 @@
 module WA.Network {
-    export class Stream {
+    
+    
+    
+    export class Node {
+        constructor(public name: string, public attrs: Object = {}, public childs: Node[] = []) {}
+    }
+    
+    export class Packet {
         private packet: number[] = [];
         
-        start(): void {
-            // protocol start
-            this.writeString("WA");
-            this.writeInt8(1);
-            this.writeInt8(2);
-            
-            // 00 00 12 => no clue what this is....
-            this.writeInt8(0);
-            this.writeInt8(0);
-            this.writeInt8(0x12);
-            
-            // send stream attributes
-            this.listStart(5);
-            this.writeInt8(1);
-            
-            this.writeString("to");
-            this.writeString(Constants.DOMAIN);
-            this.writeString("resource");
-            
-            // fc 0a => no clue what this is....
-            this.writeInt8(0xFC);
-            this.writeInt8(0x0A);
-            
-            this.writeString(Constants.TOKEN_DATA["r"]);
-        }
-        
-        getPacket(): Uint8Array {
+        serialize(): Uint8Array {
             var array = new Uint8Array(this.packet.length);
             for(var i = 0; i < this.packet.length; i++) {
                 array[i] = this.packet[i];
@@ -36,46 +17,25 @@ module WA.Network {
             return array;
         }
         
-        
-        
-        // high level encoding methods
-        
-        /*
-            def writeInternal(self,node):
-        '''define write internal here'''
-        
-        self.writeListStart(1 + (0 if node.attributes is None else len(node.attributes) * 2) + (0 if node.children is None else 1) + (0 if node.data is None else 1));
-        
-        self.writeString(node.tag);
-        self.writeAttributes(node.attributes);
-        
-        if node.data is not None:
-            self.writeBytes(node.data)
-            '''if type(node.data) == bytearray:
-                self.writeBytes(node.data);
-            else:
-                self.writeBytes(bytearray(node.data));
-            '''
-        
-        if node.children is not None:
-            self.writeListStart(len(node.children));
-            for c in node.children:
-                self.writeInternal(c);
-        */
-        sendBinaryXml(rootNode: WA.XML.Node) {
+        sendBinaryXml(node: Node) {
             var length = 1;
-            length += Object.keys(rootNode.attrs).length * 2;
-            if (rootNode.childs.length) {
+            length += Object.keys(node.attrs).length * 2;
+            if (node.childs.length) {
                 length =+ 1;
             }
             this.listStart(length);
-            this.writeString(rootNode.name);
-            this.writeAttributes(rootNode.attrs);
+            this.writeString(node.name);
+            this.writeAttributes(node.attrs);
+            
             // TODO handle node data
-            // TODO handle children
+            
+            if (node.childs.length) {
+                this.listStart(node.childs.length);
+                node.childs.forEach(child => this.sendBinaryXml(child));
+            }
         }
         
-        private listStart(listLength: number): void {
+        listStart(listLength: number): void {
             if (listLength == 0) {
                 this.writeInt8(Constants.LIST_EMPTY);
             } else if (listLength < 256) {
@@ -87,7 +47,7 @@ module WA.Network {
             }
         }
         
-        private writeAttributes(attributes: Object): void {
+        writeAttributes(attributes: Object): void {
             for(var key in attributes) {
                 this.writeString(key);
                 this.writeString(attributes[key]);
@@ -95,20 +55,20 @@ module WA.Network {
         }
 
         // low level encoding methods
-        private writeInt8(value: number): void {
+        writeInt8(value: number): void {
             if (value > 255 || value < 0) {
                 throw "Bad value for writeInt8";
             }
             this.packet.push(value);
         }
         
-        private writeInt16(value: number): void {
+        writeInt16(value: number): void {
             if (value > 65535 || value < 0) {
                 throw "Bad value for writeInt16";
             }
         }
         
-        private writeString(value: string): void {
+        writeString(value: string): void {
             var index = Constants.DICTIONARY.indexOf(value);
             if (index < 0) {
                 if (value.indexOf('@') > 0) {
@@ -127,7 +87,7 @@ module WA.Network {
             }
         }
         
-        private writeJID(jid: string): void {
+        writeJID(jid: string): void {
             
         }
     }
@@ -157,7 +117,8 @@ encode(packet);
 
 var stream = new WA.Stream();
 */
-
+/*
+var streamStartPacket = new WA.Network.Packet();
 
 var stream = new WA.Network.Stream();
 stream.start();
@@ -170,6 +131,8 @@ var features = new WA.XML.Node("stream:features", {}, [
     new WA.XML.Node("notification", {type: "participant"}),
     new WA.XML.Node("status"),
 ]);
+
+stream.sendBinaryXml(features);
 
 
 var packet = stream.getPacket();
@@ -184,3 +147,4 @@ for(var i = 0; i < packet.length; i++) {
 }
 
 document.getElementById("content").innerHTML = str;
+*/
