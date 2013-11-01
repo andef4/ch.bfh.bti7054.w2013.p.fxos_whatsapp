@@ -1,37 +1,20 @@
+import packet_factory = require("packet_factory");
 
-module WA.Auth {
-    
-    function print(data: Uint8Array): string {
-        var str: string = "";
-        for(var i = 0; i < data.length; i++) {
-            var c = data[i].toString(16);
-            if (c.length == 1) {
-                str += "0";
-            }
-            str += c;
-            str += " ";
-        }
-        return str;
-    }
-    
-    export function auth(username: string, password: string) {
-        /*var data = WA.Network.PacketFactory.helloPacket();
-        var str = print(data);
-        
-        var packet = WA.Network.PacketFactory.streamStartPacket();
-        data = packet.serialize();
-        str += print(data);
-        
-        packet = WA.Network.PacketFactory.featuresPacket();
-        data = packet.serialize();
-        str += print(data);
-        */
-        var packet = WA.Network.PacketFactory.authPacket(username);
-        var data = packet.serialize();
-        var str = print(data);
 
-        document.getElementById("content").innerHTML = str;
-    }
+
+export function auth(username: string, password: string): Uint8Array {
+    /*var data = WA.Network.PacketFactory.helloPacket();
+    var str = print(data);
+    
+    var packet = WA.Network.PacketFactory.streamStartPacket();
+    data = packet.serialize();
+    str += print(data);
+    
+    packet = WA.Network.PacketFactory.featuresPacket();
+    data = packet.serialize();
+    str += print(data);
+    */
+    var packet = packet_factory.authPacket(username);
+    var data = packet.serialize();
+    return data;
 }
-
-WA.Auth.auth(wa_username, wa_password);

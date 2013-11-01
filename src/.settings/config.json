@@ -7,12 +7,12 @@
         "useDefaultLib": true,
         "emitComments": false,
         "generateDeclarationFiles": false,
-        "mapSourceFiles": false,
+        "mapSourceFiles": true,
         "outputOption": "js",
         "codeGenTarget": 1,
-        "moduleGenTarget": 0
+        "moduleGenTarget": 1
     },
     "minify": false,
     "rememberOpenFiles": false,
-    "buildOnSave": true
+    "buildOnSave": false
 }
