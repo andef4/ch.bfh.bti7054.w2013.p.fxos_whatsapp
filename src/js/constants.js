@@ -8,6 +8,7 @@ var WA;
             "t": "PdA2DJyKoUrwLw1Bg6EIhzh502dF9noR9uFCllGk1377032097395{phone}",
             "d": "Nokia302x"
         };
+
         Constants.HOST = "c2.whatsapp.net";
         Constants.PORT = 443;
         Constants.DOMAIN = "s.whatsapp.net";

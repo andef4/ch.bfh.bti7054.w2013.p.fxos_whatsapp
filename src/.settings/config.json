@@ -1,14 +1,14 @@
 {
     "version": "1.0",
     "main": "html/main.html",
-    "sourcePath": "ts/",
-    "outputPath": "js/",
+    "sourcePath": "ts",
+    "outputPath": "js",
     "compiler": {
         "useDefaultLib": true,
         "emitComments": false,
         "generateDeclarationFiles": false,
-        "mapSourceFiles": true,
-        "outputOption": "",
+        "mapSourceFiles": false,
+        "outputOption": "js",
         "codeGenTarget": 1,
         "moduleGenTarget": 0
     },
