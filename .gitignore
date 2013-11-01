@@ -3,6 +3,7 @@
 /skulpt-dist/
 /skulpt/
 /yowsup/
-/src/js/
+/src/out_node/
+/src/out_browser/
 credentials.js
 credentials.ts
