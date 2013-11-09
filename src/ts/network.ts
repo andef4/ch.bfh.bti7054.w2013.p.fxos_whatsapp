@@ -121,3 +121,14 @@ export class Packet {
     }
 }
 
+// read packets
+export function readBinaryXml(data: Uint8Array): Node {
+    
+    
+    
+    
+    return null;
+}
+
+
+
