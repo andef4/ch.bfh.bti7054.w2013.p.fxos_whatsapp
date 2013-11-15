@@ -124,6 +124,8 @@ export class Packet {
 // read packets
 export class PacketReader {
     private currentIndex = 0;
+    private inputKey = null;
+
     constructor(private packet: Uint8Array) {
     }
     
@@ -149,7 +151,7 @@ export class PacketReader {
         this.currentIndex++;
         return num;
     }
-    
+
     readListSize(): number {
         var type = this.readInt8();
         if (type == 0) {
@@ -162,20 +164,54 @@ export class PacketReader {
             throw "Bad value in readListSize()";
         }
     }
-    
-    readBinaryXml(data: Uint8Array): Node {
+
+    readStanza(): void {
+        var header = this.readInt8();
+        var flags = header >> 4;
+        var size = this.readInt16()
+        var isEncrypted = (flags & 8) != 0;
+        if (isEncrypted && this.inputKey != null) {
+            //this.decryptPacket();
+        }
+    }
+
+    readBytes(size: number): string {
+        return null;
+    }
+
+    readString(): string {
+        var token = this.readInt8();
+        if (token > 4 && token < 245) {
+            return constants.DICTIONARY[token];
+        }
+        switch (token) {
+            case 0:
+                return null;
+            case constants.BINARY_8: // string with length in next byte
+                var size = this.readInt8();
+                return this.readBytes(size);
+            case constants.BINARY_24: // string with length in next 3 bytes
+                var size = this.readInt24();
+                return this.readBytes(size);
+            case constants.TOKEN_8:
+                token = this.readInt8();
+                return constants.DICTIONARY[token + 245];
+            case constants.JID_PAIR:
+                throw "JID Pair read in readString not implemented";
+        }
+        throw "Bad token in readString";
+    }
+
+    readAttributes(count: number): Object {
+        return null;
+    }
+
+    readBinaryXml(): Node {
         this.readStanza();
         var size = this.readListSize();
         var tag = this.readString();
         var attribCount = (size - 2 + size % 2) / 2;
         var attributes = this.readAttributes(attribCount);
-        
-        
-        
-        
-        
-        
-        
         return null;
     }
 

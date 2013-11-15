@@ -37,7 +37,9 @@ for(var i = 0; i < splits.length; i++) {
 
 var packets = parsePackets(data);
 
-console.log(network.readBinaryXml(packet[0]));
+var reader = new network.PacketReader(packets[1]);
+console.log(reader.readBinaryXml())
+//console.log(reader.read);
 
 
 
