@@ -122,13 +122,62 @@ export class Packet {
 }
 
 // read packets
-export function readBinaryXml(data: Uint8Array): Node {
+export class PacketReader {
+    private currentIndex = 0;
+    constructor(private packet: Uint8Array) {
+    }
     
+    readInt8(): number {
+        var num = this.packet[this.currentIndex];
+        this.currentIndex++;
+        return num;
+    }
+
+    readInt16(): number {
+        var num = this.packet[this.currentIndex] << 8;
+        this.currentIndex++;
+        num += this.packet[this.currentIndex];
+        this.currentIndex++;
+        return num;
+    }
+    readInt24(): number {
+        var num = this.packet[this.currentIndex] << 16;
+        this.currentIndex++;
+        num += this.packet[this.currentIndex] << 8;
+        this.currentIndex++;
+        num += this.packet[this.currentIndex];
+        this.currentIndex++;
+        return num;
+    }
     
+    readListSize(): number {
+        var type = this.readInt8();
+        if (type == 0) {
+            return 0;
+        } else if (type == constants.LIST_8) {
+            return this.readInt8();
+        } else if (type == constants.LIST_16) {
+            return this.readInt16();
+        } else {
+            throw "Bad value in readListSize()";
+        }
+    }
     
-    
-    return null;
+    readBinaryXml(data: Uint8Array): Node {
+        this.readStanza();
+        var size = this.readListSize();
+        var tag = this.readString();
+        var attribCount = (size - 2 + size % 2) / 2;
+        var attributes = this.readAttributes(attribCount);
+        
+        
+        
+        
+        
+        
+        
+        return null;
+    }
+
 }
-
-
 
