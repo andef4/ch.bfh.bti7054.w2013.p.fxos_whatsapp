@@ -124,7 +124,7 @@ export class Packet {
 // read packets
 export class PacketReader {
     private currentIndex = 0;
-    private inputKey = null;
+    private inputKey: string = null;
 
     constructor(private packet: Uint8Array) {
     }
@@ -168,7 +168,7 @@ export class PacketReader {
     readStanza(): void {
         var header = this.readInt8();
         var flags = header >> 4;
-        var size = this.readInt16()
+        var size = this.readInt16();
         var isEncrypted = (flags & 8) != 0;
         if (isEncrypted && this.inputKey != null) {
             //this.decryptPacket();
@@ -176,7 +176,11 @@ export class PacketReader {
     }
 
     readBytes(size: number): string {
-        return null;
+        var str = "";
+        for(var i = 0; i < size; i++) {
+            str += String.fromCharCode(this.readInt8());
+        }
+        return str;
     }
 
     readString(): string {

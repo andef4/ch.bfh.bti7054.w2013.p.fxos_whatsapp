@@ -38,6 +38,9 @@ for(var i = 0; i < splits.length; i++) {
 var packets = parsePackets(data);
 
 var reader = new network.PacketReader(packets[1]);
+console.log("f8 02 bb  f8 02  f8 01 9c f8 03 e4 cb 0c");
+console.log("stan-z-a  lstsz  tag-name")
+
 console.log(reader.readBinaryXml())
 //console.log(reader.read);
 
