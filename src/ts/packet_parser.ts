@@ -3,13 +3,17 @@ import network = require('./network');
 
 export function parsePackets(data: Uint8Array): Array<Uint8Array> {
     var i = 0;
-    
     var packets = new Array<Uint8Array>();
-    
     while(i < data.length) {
-        var length = (data[i] << 16) + (data[i+1] << 8) + data[i+2];
-        packets.push(data.subarray(i + 3, i + 3 + length));
-        i = i + 3 + length;
+        var header = data[i];
+        var flags = header >> 4;
+        var size = (data[i+1] << 8) + data[i+2]
+        var isEncrypted = (flags & 8) != 0;
+        if (isEncrypted && this.inputKey != null) {
+            //this.decryptPacket();
+        }
+        packets.push(data.subarray(i + 3, i + 3 + size));
+        i = i + 3 + size;
     }
     return packets;
 }
@@ -39,7 +43,7 @@ var packets = parsePackets(data);
 
 var reader = new network.PacketReader(packets[1]);
 console.log("f8 02 bb  f8 02  f8 01 9c f8 03 e4 cb 0c");
-console.log("stan-z-a  lstsz  tag-name")
+console.log("lstsz tag-name")
 
 console.log(reader.readBinaryXml())
 //console.log(reader.read);

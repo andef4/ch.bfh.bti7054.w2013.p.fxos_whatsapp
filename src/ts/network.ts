@@ -165,16 +165,6 @@ export class PacketReader {
         }
     }
 
-    readStanza(): void {
-        var header = this.readInt8();
-        var flags = header >> 4;
-        var size = this.readInt16();
-        var isEncrypted = (flags & 8) != 0;
-        if (isEncrypted && this.inputKey != null) {
-            //this.decryptPacket();
-        }
-    }
-
     readBytes(size: number): string {
         var str = "";
         for(var i = 0; i < size; i++) {
@@ -211,9 +201,9 @@ export class PacketReader {
     }
 
     readBinaryXml(): Node {
-        this.readStanza();
         var size = this.readListSize();
         var tag = this.readString();
+        console.log(tag);
         var attribCount = (size - 2 + size % 2) / 2;
         var attributes = this.readAttributes(attribCount);
         return null;
