@@ -152,8 +152,7 @@ export class PacketReader {
         return num;
     }
 
-    readListSize(): number {
-        var type = this.readInt8();
+    readListSize(type: number): number {
         if (type == 0) {
             return 0;
         } else if (type == constants.LIST_8) {
@@ -197,16 +196,43 @@ export class PacketReader {
     }
 
     readAttributes(count: number): Object {
-        return null;
+        var attributes = {};
+        for (var i = 0; i < count; i++) {
+            var key = this.readString();
+            var value = this.readString();
+            attributes[key] = value;
+        }
+        return attributes;
     }
 
     readBinaryXml(): Node {
-        var size = this.readListSize();
+        var size = this.readListSize(this.readInt8());
         var tag = this.readString();
-        console.log(tag);
         var attribCount = (size - 2 + size % 2) / 2;
         var attributes = this.readAttributes(attribCount);
-        return null;
+
+        var node : Node = null;
+        if (size % 2 == 1) { // node without data/child nodes
+            node = new Node(tag, attributes);
+        } else {
+
+            var b = this.readInt8();
+            if (b == 0 || b == constants.LIST_8 || b == constants.LIST_16) {
+                node = new Node(tag, attributes, this.readNodes(b)); // node with childs but no data
+            } else {
+                node = new Node(tag, attributes, [], this.readString()); // node with data but without childs
+            }
+        }
+        return node;
+    }
+
+    private readNodes(type: number): Node[] {
+        var size = this.readListSize(type);
+        var childs = new Array<Node>();
+        for (var i = 0; i < size; i++) {
+            childs.push(this.readBinaryXml());
+        }
+        return childs;
     }
 
 }
