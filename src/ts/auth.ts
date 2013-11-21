@@ -3,6 +3,8 @@ import net = require("net");
 
 import constants = require("./constants");
 import packet_factory = require("./packet_factory");
+import network = require("network");
+import packet_parser = require('packet_parser');
 
 function print(data: Uint8Array): string {
     var str: string = "";
@@ -17,12 +19,20 @@ function print(data: Uint8Array): string {
     return str;
 }
 
-function arrayToBuffer(array: Uint8Array) {
+function arrayToBuffer(array: Uint8Array): NodeBuffer {
     var buffer = new Buffer(array.length);
     for(var i = 0; i < array.length; i++) {
         buffer[i] = array[i];
     }
     return buffer;
+}
+
+function bufferToArray(buffer: NodeBuffer): Uint8Array {
+    var array = new Uint8Array(buffer.length);
+    for(var i = 0; i < buffer.length; i++) {
+        array[i] = buffer[i];
+    }
+    return array;
 }
 
 export function auth(username: string, password: string): void {
@@ -42,12 +52,16 @@ export function auth(username: string, password: string): void {
         packet = packet_factory.authPacket(username);
         socket.write(arrayToBuffer(packet.serialize()));
         
-        // ret = 00 00 05 f8 03 01 41 ab 00 00 0d f8 02 bb f8 02 f8 01 9c f8 03 e4 cb 0c 00 00 1b f8 04 1b e8 cf fc 14 7a bd d7 6d 6c 0f ff bd 7f 26 9e 94 f9 7d f6 0b 89 07 72 84
     });
     
     socket.on("data", function(data) {
-        console.log(print(data));
-        console.log("");
-        console.log("");
+        var packets = packet_parser.parsePackets(bufferToArray(data));
+
+        var reader = new network.PacketReader(packets[1]);
+        console.log(reader.readBinaryXml());
+        
+        reader = new network.PacketReader(packets[2]);
+        console.log(reader.readBinaryXml());
+        
     });
 }
