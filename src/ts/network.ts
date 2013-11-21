@@ -172,8 +172,7 @@ export class PacketReader {
         return str;
     }
 
-    readString(): string {
-        var token = this.readInt8();
+    readString(token: number): string {
         if (token > 4 && token < 245) {
             return constants.DICTIONARY[token];
         }
@@ -198,8 +197,8 @@ export class PacketReader {
     readAttributes(count: number): Object {
         var attributes = {};
         for (var i = 0; i < count; i++) {
-            var key = this.readString();
-            var value = this.readString();
+            var key = this.readString(this.readInt8());
+            var value = this.readString(this.readInt8());
             attributes[key] = value;
         }
         return attributes;
@@ -207,7 +206,7 @@ export class PacketReader {
 
     readBinaryXml(): Node {
         var size = this.readListSize(this.readInt8());
-        var tag = this.readString();
+        var tag = this.readString(this.readInt8());
         var attribCount = (size - 2 + size % 2) / 2;
         var attributes = this.readAttributes(attribCount);
 
@@ -220,7 +219,7 @@ export class PacketReader {
             if (b == 0 || b == constants.LIST_8 || b == constants.LIST_16) {
                 node = new Node(tag, attributes, this.readNodes(b)); // node with childs but no data
             } else {
-                node = new Node(tag, attributes, [], this.readString()); // node with data but without childs
+                node = new Node(tag, attributes, [], this.readString(b)); // node with data but without childs
             }
         }
         return node;
