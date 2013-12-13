@@ -2,6 +2,7 @@
 import net = require("net");
 
 import constants = require("./constants");
+import security = require("./security");
 import packet_factory = require("./packet_factory");
 import network = require("network");
 import packet_parser = require('packet_parser');
@@ -61,7 +62,16 @@ export function auth(username: string, password: string): void {
         console.log(reader.readBinaryXml());
         
         reader = new network.PacketReader(packets[2]);
-        console.log(reader.readBinaryXml());
+        var packet = reader.readBinaryXml();
         
+        var nonce = packet.data;
+        var key = security.keyFromPasswordNonce(password, nonce);
+        var keyStream = new security.KeyStream(key);
+        
+        var authBlob = security.authBlob(username, nonce);
+        authBlob = keyStream.encrypt(authBlob);
+        
+        var challengePacket = packet_factory.challengePacket(authBlob);
+        socket.write(arrayToBuffer(challengePacket.serialize()));
     });
 }

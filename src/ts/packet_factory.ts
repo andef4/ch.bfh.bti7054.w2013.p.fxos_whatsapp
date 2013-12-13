@@ -42,3 +42,9 @@ export function authPacket(username: string): network.Packet {
     packet.writeBinaryXml(auth);
     return packet;
 }
+
+export function challengePacket(authBlob: string): network.Packet {
+    /*		node = ProtocolTreeNode("response",{"xmlns":"urn:ietf:params:xml:ns:xmpp-sasl"}, None, authBlob);
+    */
+    return null;
+}
