@@ -1,3 +1,5 @@
+/// <reference path="../lib/cryptojs.d.ts" />
+import CryptoJS = require('../lib/cryptojs')
 
 
 export function keyFromPasswordNonce(password: string, nonce: string): string {
@@ -9,7 +11,6 @@ export function authBlob(username: string, nonce: string): string {
 }
 
 export class KeyStream {
-    
     constructor(key: string) {
         
     }
@@ -17,5 +18,4 @@ export class KeyStream {
     encrypt(data: string): string {
         return "";
     }
-
 }
