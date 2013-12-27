@@ -55,7 +55,7 @@ export function auth(username: string, password: string): void {
         
     });
     
-    socket.on("data", function(data) {
+    socket.on("data", function(data: NodeBuffer) {
         var packets = packet_parser.parsePackets(bufferToArray(data));
 
         var reader = new network.PacketReader(packets[1]);

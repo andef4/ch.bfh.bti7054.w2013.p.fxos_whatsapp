@@ -6,7 +6,7 @@
 
 declare var CryptoJS: CryptoJS.CryptoJSStatic;
 
-declare module CryptoJS{
+declare module CryptoJS {
     module lib{
         interface Base{
             extend(overrides: Object): Object
@@ -88,8 +88,8 @@ declare module CryptoJS{
             createEncryptor(key: WordArray, cfg?: C): ICipher<C>
             createDecryptor(key: WordArray, cfg?: C): ICipher<C>
 
-            create(xformMode: number, key: WordArray, cfg?: C): ICipher<C>
-            init(xformMode: number, key: WordArray, cfg?: C): void
+            create(xformMode?: number, key?: WordArray, cfg?: C): ICipher<C>
+            init(xformMode?: number, key?: WordArray, cfg?: C): void
 
             process(dataUpdate: WordArray): WordArray
             process(dataUpdate: string): WordArray
@@ -110,7 +110,7 @@ declare module CryptoJS{
             createEncryptor(key: WordArray, cfg?: C): IStreamCipher<C>
             createDecryptor(key: WordArray, cfg?: C): IStreamCipher<C>
 
-            create(xformMode: number, key: WordArray, cfg?: C): IStreamCipher<C>
+            create(xformMode?: number, key?: WordArray, cfg?: C): IStreamCipher<C>
 
             blockSize: number
         }
@@ -119,8 +119,8 @@ declare module CryptoJS{
         interface BlockCipherMode extends Base{
             createEncryptor(cipher: Cipher, iv: number[]): mode.IBlockCipherEncryptor
             createDecryptor(cipher: Cipher, iv: number[]): mode.IBlockCipherDecryptor
-            init(cipher: Cipher, iv: number[]): void
-            create(cipher: Cipher, iv: number[]): BlockCipherMode
+            init(cipher?: Cipher, iv?: number[]): void
+            create(cipher?: Cipher, iv?: number[]): BlockCipherMode
         }
 
         //BlockCipher has interface same as IStreamCipher
@@ -144,8 +144,8 @@ declare module CryptoJS{
         }
 
         interface CipherParams extends Base, CipherParamsData{
-            init(cipherParams: CipherParamsData): void
-            create(cipherParams: CipherParamsData): CipherParams
+            init(cipherParams?: CipherParamsData): void
+            create(cipherParams?: CipherParamsData): CipherParams
             toString(formatter?: format.IFormatter): string
         }
 
@@ -279,7 +279,7 @@ declare module CryptoJS{
             createEncryptor(key: lib.WordArray, cfg?: lib.IBlockCipherCfg): IBlockCipherImpl
             createDecryptor(key: lib.WordArray, cfg?: lib.IBlockCipherCfg): IBlockCipherImpl
 
-            create(xformMode: number, key: lib.WordArray, cfg?: lib.IBlockCipherCfg): IBlockCipherImpl
+            create(xformMode?: number, key?: lib.WordArray, cfg?: lib.IBlockCipherCfg): IBlockCipherImpl
         }
 
         interface AES extends IBlockCipherImpl{}
@@ -304,10 +304,10 @@ declare module CryptoJS{
         }
 
         interface HMAC extends lib.Base{
-            init(hasher: lib.Hasher, key: lib.WordArray): void
-            init(hasher: lib.Hasher, key: string): void
-            create(hasher: lib.Hasher, key: lib.WordArray): HMAC
-            create(hasher: lib.Hasher, key: string): HMAC
+            init(hasher?: lib.Hasher, key?: lib.WordArray): void
+            init(hasher?: lib.Hasher, key?: string): void
+            create(hasher?: lib.Hasher, key?: lib.WordArray): HMAC
+            create(hasher?: lib.Hasher, key?: string): HMAC
 
             update(messageUpdate: lib.WordArray): HMAC
             update(messageUpdate: string): HMAC
@@ -407,8 +407,8 @@ declare module CryptoJS{
             high: number
             low: number
 
-            init(high: number, low: number): void
-            create(high: number, low: number): Word
+            init(high?: number, low?: number): void
+            create(high?: number, low?: number): Word
         }
 
         interface WordArray extends lib.Base{
@@ -431,7 +431,6 @@ declare module CryptoJS{
         mode: mode.ModeStatic
         pad: pad.PadStatic
         x64: x64.X64Static
-
         AES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>
         DES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>
         TripleDES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>
@@ -462,4 +461,40 @@ declare module CryptoJS{
         EvpKDF: CryptoJS.algo.IEvpKDFHelper
         PBKDF2: CryptoJS.algo.IEvpKDFHelper //PBKDF2 is same as EvpKDF
     }
+}
+
+
+declare module "crypto-js" {
+        export var AES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>;
+        
+        
+        export var DES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>
+        export var TripleDES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>
+
+        export var RabbitLegacy: CryptoJS.lib.CipherHelper
+        export var Rabbit: CryptoJS.lib.CipherHelper
+        export var RC4: CryptoJS.lib.CipherHelper
+        export var RC4Drop: CryptoJS.lib.ICipherHelper<CryptoJS.algo.IRC4DropCfg>
+
+        export var MD5: CryptoJS.lib.HasherHelper
+        export var HmacMD5: CryptoJS.lib.IHasherHmacHelper
+        export var RIPEMD160: CryptoJS.lib.HasherHelper
+        export var HmacRIPEMD160: CryptoJS.lib.IHasherHmacHelper
+        export var SHA1: CryptoJS.lib.HasherHelper
+        export var HmacSHA1: CryptoJS.lib.IHasherHmacHelper
+        export var SHA256: CryptoJS.lib.HasherHelper
+        export var HmacSHA256: CryptoJS.lib.IHasherHmacHelper
+        export var SHA224: CryptoJS.lib.HasherHelper
+        export var HmacSHA224: CryptoJS.lib.IHasherHmacHelper
+        export var SHA512: CryptoJS.lib.HasherHelper
+        export var HmacSHA512: CryptoJS.lib.IHasherHmacHelper
+        export var SHA384: CryptoJS.lib.HasherHelper
+        export var HmacSHA384: CryptoJS.lib.IHasherHmacHelper
+
+        export var SHA3: CryptoJS.lib.IHasherHelper<CryptoJS.algo.ISHA3Cfg>
+        export var HmacSHA3: CryptoJS.lib.IHasherHmacHelper
+
+        export var EvpKDF: CryptoJS.algo.IEvpKDFHelper
+        export var PBKDF2: CryptoJS.algo.IEvpKDFHelper //PBKDF2 is same as EvpKDF
+        
 }
