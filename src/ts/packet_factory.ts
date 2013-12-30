@@ -38,13 +38,16 @@ export function authPacket(username: string): network.Packet {
         user: username,
         xmlns: "urn:ietf:params:xml:ns:xmpp-sasl",
         mechanism: "WAUTH-1",
-    }, [], "");
+    }, [], new Uint8Array(0));
     packet.writeBinaryXml(auth);
     return packet;
 }
 
 export function challengePacket(authBlob: Uint8Array): network.Packet {
-    /*		node = ProtocolTreeNode("response",{"xmlns":"urn:ietf:params:xml:ns:xmpp-sasl"}, None, authBlob);
-    */
-    return null;
+    var packet = new network.Packet();
+    var auth = new network.Node("response", {
+        xmlns: "urn:ietf:params:xml:ns:xmpp-sasl",
+    }, [], authBlob);
+    packet.writeBinaryXml(auth);
+    return packet;
 }

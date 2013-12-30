@@ -4,8 +4,9 @@ import net = require("net");
 import constants = require("./constants");
 import security = require("./security");
 import packet_factory = require("./packet_factory");
-import network = require("network");
-import packet_parser = require('packet_parser');
+import network = require("./network");
+import packet_parser = require("./packet_parser");
+import helpers = require("./helpers");
 
 function print(data: Uint8Array): string {
     var str: string = "";
@@ -36,6 +37,7 @@ function bufferToArray(buffer: NodeBuffer): Uint8Array {
     return array;
 }
 
+
 export function auth(username: string, password: string): void {
     
     var socket = net.connect(constants.PORT, constants.HOST);
@@ -64,7 +66,7 @@ export function auth(username: string, password: string): void {
         reader = new network.PacketReader(packets[2]);
         var packet = reader.readBinaryXml();
         
-        var nonce = packet.data;
+        var nonce = helpers.arrayToString(packet.data);
         var key = security.keyFromPasswordNonce(password, nonce);
         var keyStream = new security.KeyStream(key);
         

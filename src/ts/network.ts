@@ -1,7 +1,8 @@
 import constants = require("constants");
+import helpers = require("./helpers");
 
 export class Node {
-    constructor(public name: string, public attrs: Object = {}, public childs: Node[] = [], public data: string = null) {}
+    constructor(public name: string, public attrs: Object = {}, public childs: Node[] = [], public data: Uint8Array = null) {}
 }
 
 export class Packet {
@@ -86,7 +87,7 @@ export class Packet {
         this.packet.push(value & 0xFF);
     }
     
-    writeBytes(bytes: string): void {
+    writeBytes(bytes: Uint8Array): void {
         if (bytes.length > 255) {
             this.writeInt8(constants.BINARY_24);
             this.writeInt24(bytes.length);
@@ -95,8 +96,12 @@ export class Packet {
             this.writeInt8(bytes.length);
         }
         for(var i = 0; i < bytes.length; i++) {
-            this.packet.push(bytes.charCodeAt(i));
+            this.packet.push(bytes[i]);
         }
+    }
+    
+    writeByteString(bytes: string): void {
+        this.writeBytes(helpers.stringToArray(bytes));
     }
     
     writeString(value: string): void {
@@ -105,7 +110,7 @@ export class Packet {
             if (value.indexOf('@') > 0) {
                 this.writeJID(value);
             } else {
-                this.writeBytes(value);
+                this.writeByteString(value);
             }
         }
         else if (index < 245) {
@@ -219,7 +224,7 @@ export class PacketReader {
             if (b == 0 || b == constants.LIST_8 || b == constants.LIST_16) {
                 node = new Node(tag, attributes, this.readNodes(b)); // node with childs but no data
             } else {
-                node = new Node(tag, attributes, [], this.readString(b)); // node with data but without childs
+                node = new Node(tag, attributes, [], helpers.stringToArray(this.readString(b))); // node with data but without childs
             }
         }
         return node;
@@ -235,4 +240,6 @@ export class PacketReader {
     }
 
 }
+
+
 
