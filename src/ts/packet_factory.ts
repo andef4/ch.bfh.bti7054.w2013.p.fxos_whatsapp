@@ -43,7 +43,7 @@ export function authPacket(username: string): network.Packet {
     return packet;
 }
 
-export function challengePacket(authBlob: string): network.Packet {
+export function challengePacket(authBlob: Uint8Array): network.Packet {
     /*		node = ProtocolTreeNode("response",{"xmlns":"urn:ietf:params:xml:ns:xmpp-sasl"}, None, authBlob);
     */
     return null;

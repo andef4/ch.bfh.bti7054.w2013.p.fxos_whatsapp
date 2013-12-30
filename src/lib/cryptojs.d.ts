@@ -465,36 +465,40 @@ declare module CryptoJS {
 
 
 declare module "crypto-js" {
-        export var AES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>;
-        
-        
-        export var DES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>
-        export var TripleDES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>
+    export var AES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>;
+    
+    
+    export var DES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>
+    export var TripleDES: CryptoJS.lib.ICipherHelper<CryptoJS.lib.IBlockCipherCfg>
 
-        export var RabbitLegacy: CryptoJS.lib.CipherHelper
-        export var Rabbit: CryptoJS.lib.CipherHelper
-        export var RC4: CryptoJS.lib.CipherHelper
-        export var RC4Drop: CryptoJS.lib.ICipherHelper<CryptoJS.algo.IRC4DropCfg>
+    export var RabbitLegacy: CryptoJS.lib.CipherHelper
+    export var Rabbit: CryptoJS.lib.CipherHelper
+    export var RC4: CryptoJS.lib.CipherHelper
+    export var RC4Drop: CryptoJS.lib.ICipherHelper<CryptoJS.algo.IRC4DropCfg>
 
-        export var MD5: CryptoJS.lib.HasherHelper
-        export var HmacMD5: CryptoJS.lib.IHasherHmacHelper
-        export var RIPEMD160: CryptoJS.lib.HasherHelper
-        export var HmacRIPEMD160: CryptoJS.lib.IHasherHmacHelper
-        export var SHA1: CryptoJS.lib.HasherHelper
-        export var HmacSHA1: CryptoJS.lib.IHasherHmacHelper
-        export var SHA256: CryptoJS.lib.HasherHelper
-        export var HmacSHA256: CryptoJS.lib.IHasherHmacHelper
-        export var SHA224: CryptoJS.lib.HasherHelper
-        export var HmacSHA224: CryptoJS.lib.IHasherHmacHelper
-        export var SHA512: CryptoJS.lib.HasherHelper
-        export var HmacSHA512: CryptoJS.lib.IHasherHmacHelper
-        export var SHA384: CryptoJS.lib.HasherHelper
-        export var HmacSHA384: CryptoJS.lib.IHasherHmacHelper
+    export var MD5: CryptoJS.lib.HasherHelper
+    export var HmacMD5: CryptoJS.lib.IHasherHmacHelper
+    export var RIPEMD160: CryptoJS.lib.HasherHelper
+    export var HmacRIPEMD160: CryptoJS.lib.IHasherHmacHelper
+    export var SHA1: CryptoJS.lib.HasherHelper
+    export var HmacSHA1: CryptoJS.lib.IHasherHmacHelper
+    export var SHA256: CryptoJS.lib.HasherHelper
+    export var HmacSHA256: CryptoJS.lib.IHasherHmacHelper
+    export var SHA224: CryptoJS.lib.HasherHelper
+    export var HmacSHA224: CryptoJS.lib.IHasherHmacHelper
+    export var SHA512: CryptoJS.lib.HasherHelper
+    export var HmacSHA512: CryptoJS.lib.IHasherHmacHelper
+    export var SHA384: CryptoJS.lib.HasherHelper
+    export var HmacSHA384: CryptoJS.lib.IHasherHmacHelper
 
-        export var SHA3: CryptoJS.lib.IHasherHelper<CryptoJS.algo.ISHA3Cfg>
-        export var HmacSHA3: CryptoJS.lib.IHasherHmacHelper
+    export var SHA3: CryptoJS.lib.IHasherHelper<CryptoJS.algo.ISHA3Cfg>
+    export var HmacSHA3: CryptoJS.lib.IHasherHmacHelper
 
-        export var EvpKDF: CryptoJS.algo.IEvpKDFHelper
-        export var PBKDF2: CryptoJS.algo.IEvpKDFHelper //PBKDF2 is same as EvpKDF
-        
+    export var EvpKDF: CryptoJS.algo.IEvpKDFHelper
+    export var PBKDF2: CryptoJS.algo.IEvpKDFHelper //PBKDF2 is same as EvpKDF
+
+    module enc {
+        export var Latin1: CryptoJS.enc.ICoder;
+        export var Base64: CryptoJS.enc.ICoder;
+    }
 }

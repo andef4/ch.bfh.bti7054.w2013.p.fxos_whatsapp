@@ -3,11 +3,29 @@ import CryptoJS = require("crypto-js");
 
 
 export function keyFromPasswordNonce(password: string, nonce: string): string {
-    return "";
+    return CryptoJS.PBKDF2(password, nonce, {keySize: 5, iterations: 16}).toString(CryptoJS.enc.Latin1);
 } 
 
-export function authBlob(username: string, nonce: string): string {
-    return "";
+function addStringToArray(arr: Array, str: string): void {
+    for(var i = 0; i < str.length; i++) {
+        arr.push(str.charCodeAt(i));
+    }
+}
+
+export function authBlob(username: string, nonce: string): Uint8Array {
+    var nums: number[] = [0, 0, 0, 0];
+    addStringToArray(nums, username);
+    addStringToArray(nums, nonce);
+    
+    var utcTimestamp = Math.floor(new Date().getTime() / 1000).toString();
+    
+    addStringToArray(nums, utcTimestamp);
+    
+    var array = new Uint8Array(nums.length);
+    for (var i = 0; i < nums.length; i++) {
+        array[i] = nums[i];
+    }
+    return array;
 }
 
 export class KeyStream {
@@ -15,11 +33,7 @@ export class KeyStream {
         
     }
     
-    encrypt(data: string): string {
-        return "";
+    encrypt(data: Uint8Array): Uint8Array {
+        return null;
     }
 }
-
-
-console.log(CryptoJS.PBKDF2("password", "salt", {keySize: 20}));
-
