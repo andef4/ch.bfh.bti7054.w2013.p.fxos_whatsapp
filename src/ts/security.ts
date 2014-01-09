@@ -6,7 +6,7 @@ export function keyFromPasswordNonce(password: string, nonce: string): string {
     return CryptoJS.PBKDF2(password, nonce, {keySize: 5, iterations: 16}).toString(CryptoJS.enc.Latin1);
 } 
 
-function addStringToArray(arr: Array, str: string): void {
+function addStringToArray(arr: Array<number>, str: string): void {
     for(var i = 0; i < str.length; i++) {
         arr.push(str.charCodeAt(i));
     }
