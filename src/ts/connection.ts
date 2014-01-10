@@ -8,6 +8,20 @@ import network = require("./network");
 import packet_parser = require("./packet_parser");
 import helpers = require("./helpers");
 
+
+export class WhatsAppConnection {
+    
+    onauth: {(): void};
+    
+    constructor(platform: IPlatform) {
+        
+    }
+    
+    connect() {
+        
+    }
+}
+
 function print(data: Uint8Array): string {
     var str: string = "";
     for(var i = 0; i < data.length; i++) {

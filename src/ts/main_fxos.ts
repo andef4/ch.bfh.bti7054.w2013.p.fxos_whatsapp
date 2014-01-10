@@ -1,3 +1,4 @@
+/*
 import auth = require("./auth");
 import credentials = require("./credentials");
 
@@ -15,6 +16,7 @@ function print(data: Uint8Array): string {
 }
 
 var packet = auth.auth(credentials.username, credentials.password);
+*/
 
 //var str = print(packet);
 //document.getElementById("content").innerHTML = str;
