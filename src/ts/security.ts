@@ -13,7 +13,7 @@ function addStringToArray(arr: Array<number>, str: string): void {
 }
 
 export function authBlob(username: string, nonce: string): Uint8Array {
-    var nums: number[] = [0, 0, 0, 0];
+    var nums: number[] = [0, 0, 0, 0]; // space to write HMAC
     addStringToArray(nums, username);
     addStringToArray(nums, nonce);
     
@@ -33,7 +33,7 @@ export class KeyStream {
         
     }
     
-    encrypt(data: Uint8Array): Uint8Array {
+    encrypt(data: Uint8Array, dataOffset: number, dataLength: number, macOffset: number): Uint8Array {
         return null;
     }
 }
