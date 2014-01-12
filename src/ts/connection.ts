@@ -10,7 +10,7 @@ enum ConnectionState {CONNECTED, CHALLENGE_SENT};
 export class WhatsAppConnection {
     
     private platform: IPlatform;
-    private socket: ISocket;
+    private socket: ISocket = null;
     private outKeyStream: security.KeyStream = null;
     private inKeyStream: security.KeyStream = null;
     private state: ConnectionState = null;
@@ -22,6 +22,7 @@ export class WhatsAppConnection {
     }
     
     private ondata(data: Uint8Array) {
+        console.log("ondata");
         var packets = network.parsePackets(this.inKeyStream, data);
         if (this.state == ConnectionState.CONNECTED) {
             var reader = new network.PacketReader(packets[1]);
@@ -41,7 +42,9 @@ export class WhatsAppConnection {
             this.socket.write(challengePacket.serialize());
             this.state = ConnectionState.CHALLENGE_SENT;
         } else if(this.state == ConnectionState.CHALLENGE_SENT) {
-            
+            for(var i = 0; i < packets.length; i++) {
+                var reader = new network.PacketReader(packets[i]);
+            }
         }
     }
     

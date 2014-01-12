@@ -1,5 +1,5 @@
-import network = require("network");
-import constants = require("constants");
+import network = require("./network");
+import constants = require("./constants");
 
 export function helloPacket(): Uint8Array {
     var packet = new Uint8Array(4);

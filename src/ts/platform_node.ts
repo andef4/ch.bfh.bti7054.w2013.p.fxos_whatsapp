@@ -37,10 +37,8 @@ export class NodeSocket implements ISocket {
     
     connect(host: string, port: number): void {
         this.socket = net.connect(port, host);
-        this.socket.on("connect", this.onconnect);
-        this.socket.on("data", function(data: NodeBuffer) {
-            this.ondata(NodeSocket.bufferToArray(data));
-        });
+        this.socket.on("connect", () => this.onconnect());
+        this.socket.on("data", (data: NodeBuffer) => this.ondata(NodeSocket.bufferToArray(data)));
     }
     write(data: Uint8Array): void {
         this.socket.write(NodeSocket.arrayToBuffer(data));
