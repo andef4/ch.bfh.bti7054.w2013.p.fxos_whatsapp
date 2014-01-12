@@ -7,17 +7,17 @@ help:
 
 node:
 	mkdir -p out_node/
-	tsc -m commonjs --noImplicitAny --outDir out_node/ ts/*.ts	
+	tsc -m commonjs --outDir out_node/ ts/*.ts	
 
 watch_node:
 	mkdir -p out_node/
-	tsc -m commonjs --noImplicitAny --outDir out_node/ ts/*.ts -w
+	tsc -m commonjs --outDir out_node/ ts/*.ts -w
 
 browser:
 	mkdir -p out_browser/
-	tsc -m amd --noImplicitAny --outDir out_browser/ --sourcemap ts/*.ts	
+	tsc -m amd  --outDir out_browser/ --sourcemap ts/*.ts	
 
 watch_browser:
 	mkdir -p out_browser/
-	tsc -m amd --noImplicitAny --outDir out_browser/ --sourcemap ts/*.ts -w	
+	tsc -m amd --outDir out_browser/ --sourcemap ts/*.ts -w	
 
