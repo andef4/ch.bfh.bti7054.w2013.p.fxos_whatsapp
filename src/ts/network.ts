@@ -1,9 +1,11 @@
-import constants = require("constants");
+import constants = require("./constants");
 import helpers = require("./helpers");
+import security = require("./security");
 
 export class Node {
     constructor(public name: string, public attrs: Object = {}, public childs: Node[] = [], public data: Uint8Array = null) {}
 }
+
 
 export class Packet {
     private packet: number[] = [];
@@ -127,6 +129,25 @@ export class Packet {
 }
 
 // read packets
+export function parsePackets(inKeyStream: security.KeyStream, data: Uint8Array): Array<Uint8Array> {
+    var i = 0;
+    var packets = new Array<Uint8Array>();
+    while(i < data.length) {
+        var header = data[i];
+        var flags = header >> 4;
+        var size = (data[i+1] << 8) + data[i+2]
+        var isEncrypted = (flags & 8) != 0;
+        
+        var data = data.subarray(i + 3, i + 3 + size);
+        if (isEncrypted && inKeyStream != null) {
+            data = inKeyStream.decrypt(data);
+        }
+        packets.push(data);
+        i = i + 3 + size;
+    }
+    return packets;
+}
+
 export class PacketReader {
     private currentIndex = 0;
     private inputKey: string = null;

@@ -29,6 +29,10 @@ export class KeyStream {
         
     }
     
+    decrypt(data: Uint8Array): Uint8Array {
+        return null;
+    }
+    
     encrypt(data: Uint8Array, dataOffset: number, dataLength: number, macOffset: number): Uint8Array {
         return null;
     }
