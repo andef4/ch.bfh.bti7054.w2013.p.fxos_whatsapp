@@ -1,10 +1,6 @@
-/// <reference path="../lib/cryptojs.d.ts" />
-import CryptoJS = require("crypto-js");
-
-
-export function keyFromPasswordNonce(password: string, nonce: string): string {
-    return CryptoJS.PBKDF2(password, nonce, {keySize: 5, iterations: 16}).toString(CryptoJS.enc.Latin1);
-} 
+export function keyFromPasswordNonce(crypto: ICrypto, password: string, nonce: string): string {
+    return crypto.PBKDF2(password, nonce, 5, 16);
+}
 
 function addStringToArray(arr: Array<number>, str: string): void {
     for(var i = 0; i < str.length; i++) {
