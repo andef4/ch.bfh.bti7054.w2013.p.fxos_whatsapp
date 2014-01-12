@@ -43,6 +43,7 @@ export class WhatsAppConnection implements ISocketHandler{
         } else if(this.state == ConnectionState.CHALLENGE_SENT) {
             for(var i = 0; i < packets.length; i++) {
                 var reader = new network.PacketReader(packets[i]);
+                console.log(reader.readBinaryXml());
             }
         }
     }

@@ -5,7 +5,8 @@ interface IRC4 {
 
 interface ICrypto {
     PBKDF2(password: string, salt: string, keySize: number, iterations: number): string;
-    RC4(key: string, drop: number): IRC4
+    RC4(key: string, drop: number): IRC4;
+    HmacSHA1(key: string, data: Uint8Array);
 }
 interface IContacts {
     getContacts(): Array<String>;

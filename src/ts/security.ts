@@ -27,9 +27,11 @@ export function authBlob(username: string, nonce: string): Uint8Array {
 export class KeyStream {
     private crypto: ICrypto;
     private rc4: IRC4;
+    private key: string;
     constructor(crypto: ICrypto, key: string) {
         this.crypto = crypto;
-        this.crypto.RC4(key, 256);
+        this.key = key;
+        this.rc4 = this.crypto.RC4(key, 256);
     }
     
     decrypt(data: Uint8Array): Uint8Array {
@@ -37,8 +39,16 @@ export class KeyStream {
     }
     
     encrypt(data: Uint8Array, dataOffset: number, dataLength: number, macOffset: number): Uint8Array {
+        var encryptedData = this.rc4.encrypt(data.subarray(dataOffset, dataOffset+dataLength));
+        var hmac = this.crypto.HmacSHA1(this.key, encryptedData);
         
-        
-        return null;
+        var ret = new Uint8Array(data.length);
+        for (var i = macOffset; i < macOffset + 4; i++) {
+            ret[i] = hmac[i - macOffset];
+        }
+        for (var i = dataOffset; i < dataOffset + dataLength; i++) {
+            ret[i] = encryptedData[i - dataOffset];
+        }
+        return ret;
     }
 }

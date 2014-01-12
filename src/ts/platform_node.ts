@@ -22,12 +22,13 @@ export class NodePlatform implements IPlatform {
 export class NodeRC4 implements IRC4 {
     private rc4;
     
-    init(key: string, drop: number): void {
-        this.rc4 = CryptoJS.algo.RC4Drop.createEncryptor(CryptoJS.enc.Latin1.parse(key));
+    init(key: string, dropBytes: number): void {
+        this.rc4 = CryptoJS.algo.RC4Drop.createEncryptor(CryptoJS.enc.Latin1.parse(key), {drop: dropBytes*4});
     }
     
     encrypt(data: Uint8Array): Uint8Array {
-        return this.rc4.process(helpers.arrayToString(data));
+        var encrypted = this.rc4.process(helpers.arrayToString(data));
+        return helpers.stringToArray(encrypted.toString(CryptoJS.enc.Latin1));
     }
 }
 
@@ -40,6 +41,11 @@ export class NodeCrypto implements ICrypto {
         var rc4 = new NodeRC4();
         rc4.init(key, drop)
         return rc4;
+    }
+    
+    HmacSHA1(key: string, data: Uint8Array): Uint8Array {
+        var encrypted = CryptoJS.HmacSHA1(CryptoJS.enc.Latin1.parse(key), CryptoJS.enc.Latin1.parse(helpers.arrayToString(data)));
+        return helpers.stringToArray(encrypted.toString(CryptoJS.enc.Latin1));
     }
 }
 
