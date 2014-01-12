@@ -25,8 +25,11 @@ export function authBlob(username: string, nonce: string): Uint8Array {
 }
 
 export class KeyStream {
-    constructor(key: string) {
-        
+    private crypto: ICrypto;
+    private rc4: IRC4;
+    constructor(crypto: ICrypto, key: string) {
+        this.crypto = crypto;
+        this.crypto.RC4(key, 256);
     }
     
     decrypt(data: Uint8Array): Uint8Array {
@@ -34,6 +37,8 @@ export class KeyStream {
     }
     
     encrypt(data: Uint8Array, dataOffset: number, dataLength: number, macOffset: number): Uint8Array {
+        
+        
         return null;
     }
 }

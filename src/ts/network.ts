@@ -138,11 +138,11 @@ export function parsePackets(inKeyStream: security.KeyStream, data: Uint8Array):
         var size = (data[i+1] << 8) + data[i+2]
         var isEncrypted = (flags & 8) != 0;
         
-        var data = data.subarray(i + 3, i + 3 + size);
-        if (isEncrypted && inKeyStream != null) {
+        //data = data.subarray(i + 3, i + 3 + size);
+        /*if (isEncrypted && inKeyStream != null) {
             data = inKeyStream.decrypt(data);
-        }
-        packets.push(data);
+        }*/
+        packets.push(data.subarray(i + 3, i + 3 + size));
         i = i + 3 + size;
     }
     return packets;

@@ -7,7 +7,7 @@ import helpers = require("./helpers");
 
 enum ConnectionState {CONNECTED, CHALLENGE_SENT};
 
-export class WhatsAppConnection {
+export class WhatsAppConnection implements ISocketHandler{
     
     private platform: IPlatform;
     private socket: ISocket = null;
@@ -21,8 +21,7 @@ export class WhatsAppConnection {
         this.platform = platform;
     }
     
-    private ondata(data: Uint8Array) {
-        console.log("ondata");
+    ondata(data: Uint8Array) {
         var packets = network.parsePackets(this.inKeyStream, data);
         if (this.state == ConnectionState.CONNECTED) {
             var reader = new network.PacketReader(packets[1]);
@@ -31,8 +30,8 @@ export class WhatsAppConnection {
             
             var nonce = helpers.arrayToString(packet.data);
             var key = security.keyFromPasswordNonce(this.platform.getCrypto(), this.platform.getCredentials().getPassword(), nonce);
-            this.outKeyStream = new security.KeyStream(key);
-            this.inKeyStream = new security.KeyStream(key);
+            this.outKeyStream = new security.KeyStream(this.platform.getCrypto(), key);
+            this.inKeyStream = new security.KeyStream(this.platform.getCrypto(), key);
             
             var authBlob = security.authBlob(this.platform.getCredentials().getUsername(), nonce);
             // hmac is in the first 4 bytes of the blob
@@ -48,7 +47,7 @@ export class WhatsAppConnection {
         }
     }
     
-    private onconnect() {
+    onconnect() {
         var data = packet_factory.helloPacket();
         this.socket.write(data);
         
@@ -66,8 +65,6 @@ export class WhatsAppConnection {
     
     connect() {
         this.socket = this.platform.getSocket();
-        this.socket.onconnect = this.onconnect;
-        this.socket.ondata = this.ondata;
-        this.socket.connect(constants.HOST, constants.PORT);
+        this.socket.connect(this, constants.HOST, constants.PORT);
     }
 }

@@ -501,4 +501,8 @@ declare module "crypto-js" {
         export var Latin1: CryptoJS.enc.ICoder;
         export var Base64: CryptoJS.enc.ICoder;
     }
+    
+    module algo {
+        export var RC4Drop: CryptoJS.algo.RC4Drop;
+    }
 }

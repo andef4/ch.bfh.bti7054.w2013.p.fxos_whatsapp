@@ -2,6 +2,7 @@
 import CryptoJS = require("crypto-js");
 import net = require("net");
 import credentials = require("./credentials");
+import helpers = require("./helpers");
 
 export class NodePlatform implements IPlatform {
     getCrypto() {
@@ -18,9 +19,27 @@ export class NodePlatform implements IPlatform {
     }
 }
 
+export class NodeRC4 implements IRC4 {
+    private rc4;
+    
+    init(key: string, drop: number): void {
+        this.rc4 = CryptoJS.algo.RC4Drop.createEncryptor(CryptoJS.enc.Latin1.parse(key));
+    }
+    
+    encrypt(data: Uint8Array): Uint8Array {
+        return this.rc4.process(helpers.arrayToString(data));
+    }
+}
+
 export class NodeCrypto implements ICrypto {
     PBKDF2(password: string, salt: string, keySize: number, iterations: number): string {
         return CryptoJS.PBKDF2(password, salt, {keySize: keySize, iterations: iterations}).toString(CryptoJS.enc.Latin1);
+    }
+    
+    RC4(key: string, drop: number): IRC4 {
+        var rc4 = new NodeRC4();
+        rc4.init(key, drop)
+        return rc4;
     }
 }
 
@@ -32,13 +51,11 @@ export class NodeContacts implements IContacts {
 
 export class NodeSocket implements ISocket {
     private socket: net.NodeSocket;
-    ondata: {(data: Uint8Array): void};
-    onconnect: {(): void};
     
-    connect(host: string, port: number): void {
+    connect(handler: ISocketHandler, host: string, port: number): void {
         this.socket = net.connect(port, host);
-        this.socket.on("connect", () => this.onconnect());
-        this.socket.on("data", (data: NodeBuffer) => this.ondata(NodeSocket.bufferToArray(data)));
+        this.socket.on("connect", () => handler.onconnect());
+        this.socket.on("data", (data: NodeBuffer) => handler.ondata(NodeSocket.bufferToArray(data)));
     }
     write(data: Uint8Array): void {
         this.socket.write(NodeSocket.arrayToBuffer(data));
@@ -59,7 +76,6 @@ export class NodeSocket implements ISocket {
         }
         return array;
     }
-
 }
 
 export class NodeCredentials implements ICredentials {
