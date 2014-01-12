@@ -41,6 +41,8 @@ function bufferToArray(buffer: NodeBuffer): Uint8Array {
 export function auth(username: string, password: string): void {
     
     var socket = net.connect(constants.PORT, constants.HOST);
+    var outKeyStream: security.KeyStream = null;
+    var inKeyStream: security.KeyStream = null;
     
     socket.on("connect", function() {
         var data = packet_factory.helloPacket();
@@ -68,10 +70,12 @@ export function auth(username: string, password: string): void {
         
         var nonce = helpers.arrayToString(packet.data);
         var key = security.keyFromPasswordNonce(password, nonce);
-        var keyStream = new security.KeyStream(key);
+        outKeyStream = new security.KeyStream(key);
+        inKeyStream = new security.KeyStream(key);
         
         var authBlob = security.authBlob(username, nonce);
-        authBlob = keyStream.encrypt(authBlob);
+        // hmac is in the first 4 bytes of the blob
+        authBlob = outKeyStream.encrypt(authBlob, 4, authBlob.length-4, 0);
         
         var challengePacket = packet_factory.challengePacket(authBlob);
         socket.write(arrayToBuffer(challengePacket.serialize()));
