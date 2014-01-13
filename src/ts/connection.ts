@@ -35,7 +35,7 @@ export class WhatsAppConnection implements ISocketHandler{
             
             var authBlob = security.authBlob(this.platform.getCredentials().getUsername(), nonce);
             // hmac is in the first 4 bytes of the blob
-            authBlob = this.outKeyStream.encrypt(authBlob, 4, authBlob.length-4, 0);
+            authBlob = this.outKeyStream.encrypt(authBlob, 4, 0);
     
             var challengePacket = packet_factory.challengePacket(authBlob);
             this.socket.write(challengePacket.serialize());

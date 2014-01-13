@@ -38,15 +38,15 @@ export class KeyStream {
         return null;
     }
     
-    encrypt(data: Uint8Array, dataOffset: number, dataLength: number, macOffset: number): Uint8Array {
-        var encryptedData = this.rc4.encrypt(data.subarray(dataOffset, dataOffset+dataLength));
+    encrypt(data: Uint8Array, dataOffset: number, macOffset: number): Uint8Array {
+        var encryptedData = this.rc4.encrypt(data);
         var hmac = this.crypto.HmacSHA1(this.key, encryptedData);
         
-        var ret = new Uint8Array(data.length);
+        var ret = new Uint8Array(data.length + 4);
         for (var i = macOffset; i < macOffset + 4; i++) {
             ret[i] = hmac[i - macOffset];
         }
-        for (var i = dataOffset; i < dataOffset + dataLength; i++) {
+        for (var i = dataOffset; i < encryptedData.length; i++) {
             ret[i] = encryptedData[i - dataOffset];
         }
         return ret;
