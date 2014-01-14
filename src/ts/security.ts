@@ -37,7 +37,8 @@ export class KeyStream {
     }
     
     decrypt(data: Uint8Array): Uint8Array {
-        return this.rc4.cipher(data);
+        // TODO check HMAC
+        return this.rc4.cipher(data.subarray(4));
     }
     
     encrypt(data: Uint8Array, dataOffset: number, macOffset: number): Uint8Array {
