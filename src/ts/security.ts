@@ -52,3 +52,109 @@ export class KeyStream {
         return ret;
     }
 }
+
+
+export class RC4Drop {
+    
+    private i = 0;
+    private j = 0;
+    private s = new  Array<number>();
+    
+    constructor(key: string, drop: number) {
+        for (var i = 0; i < 256; i++) {
+            this.s.push(i);
+        }
+        for (var i = 0; i < 256; i++) {
+            this.j = (this.j + this.s[i] + key.charAt(i % key.length).charCodeAt(0)) % 256;
+            this.swap(i, this.j);
+        }
+        this.j = 0;
+        
+        // bad
+        var dropData = new  Uint8Array(drop);
+        for (var i = 0; i < drop; i++) {
+            dropData[i] = 0;
+        }
+        this.cipher(dropData);
+        console.log(this.s.slice(0, 20));
+    }
+    
+    swap(i: number, j: number): void {
+        var tmp = this.s[i];
+        this.s[i] = this.s[j];
+        this.s[j] = tmp;
+    }
+    
+    cipher(data: Uint8Array): Uint8Array {
+        var length = data.length;
+        var offset = 0;
+        while (true) {
+            var num = length;
+            length = num - 1;
+            if (num == 0) {
+                break;
+            }
+            this.i = (this.i + 1) % 256;
+            this.j = (this.j + this.s[this.i]) % 256;
+            
+            this.swap(this.i, this.j);
+            
+            var num2 = offset;
+            offset = num2 + 1;
+            
+            this.s[num2] = data[num2];
+            this.s[num2] = (data[num2] ^ this.s[(this.s[this.i] + this.s[this.j]) % 256]);
+        }
+        return data;
+    }
+    
+}
+
+/*
+
+class RC4:
+        def __init__(self, key, drop):
+                self.s = []
+                self.i = 0;
+                self.j = 0;
+                
+                self.s = [0] * 256
+                
+                for i in range(0, len(self.s)):
+                        self.s[i] = i
+                
+                for i in range(0, len(self.s)):
+                        self.j = (self.j + self.s[i] + ord(key[i % len(key)])) % 256
+                        RC4.swap(self.s, i, self.j)
+                
+                self.j = 0;
+                
+                self.cipher(_bytearray(drop), 0, drop)
+        
+        
+        def cipher(self, data, offset, length):
+                while True:
+                        num = length
+                        length = num - 1
+                        
+                        if num == 0: break
+                        
+                        self.i = (self.i+1) % 256
+                        self.j = (self.j + self.s[self.i]) % 256
+                        
+                        RC4.swap(self.s, self.i, self.j)
+                        
+                        num2 = offset
+                        offset = num2 + 1
+                        
+                        data[num2] = ord(data[num2]) if type(data[num2]) == str else data[num2]
+                        data[num2] = (data[num2] ^ self.s[(self.s[self.i] + self.s[self.j]) % 256])
+        
+        @staticmethod
+        def swap(arr, i, j):
+                tmp = arr[i]
+                arr[i] = arr[j]
+                arr[j] = tmp
+*/
+
+
