@@ -76,7 +76,7 @@ export class NodeCredentials implements ICredentials {
         return credentials.username;
     }
     getPassword(): string {
-        return credentials.password;
+        return CryptoJS.enc.Base64.parse(credentials.password).toString(CryptoJS.enc.Latin1);
     }
 }
 
