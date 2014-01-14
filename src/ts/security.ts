@@ -70,13 +70,11 @@ export class RC4Drop {
         }
         this.j = 0;
         
-        // bad
         var dropData = new  Uint8Array(drop);
         for (var i = 0; i < drop; i++) {
             dropData[i] = 0;
         }
         this.cipher(dropData);
-        console.log(this.s.slice(0, 20));
     }
     
     swap(i: number, j: number): void {
@@ -102,8 +100,8 @@ export class RC4Drop {
             var num2 = offset;
             offset = num2 + 1;
             
-            this.s[num2] = data[num2];
-            this.s[num2] = (data[num2] ^ this.s[(this.s[this.i] + this.s[this.j]) % 256]);
+            data[num2] = data[num2];
+            data[num2] = (data[num2] ^ this.s[(this.s[this.i] + this.s[this.j]) % 256]);
         }
         return data;
     }
