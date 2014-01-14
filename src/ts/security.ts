@@ -11,7 +11,7 @@ function addStringToArray(arr: Array<number>, str: string): void {
 }
 
 export function authBlob(username: string, nonce: string): Uint8Array {
-    var nums: number[] = [0, 0, 0, 0]; // space to write HMAC
+    var nums: number[] = [];
     addStringToArray(nums, username);
     addStringToArray(nums, nonce);
     
