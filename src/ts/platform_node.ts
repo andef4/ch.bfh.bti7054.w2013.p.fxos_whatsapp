@@ -3,6 +3,7 @@ import CryptoJS = require("crypto-js");
 import net = require("net");
 import credentials = require("./credentials");
 import helpers = require("./helpers");
+import jsSHA = require("jssha");
 
 export class NodePlatform implements IPlatform {
     getCrypto() {
@@ -27,8 +28,11 @@ export class NodeCrypto implements ICrypto {
     }
     
     HmacSHA1(key: string, data: Uint8Array): Uint8Array {
-        var encrypted = CryptoJS.HmacSHA1(CryptoJS.enc.Latin1.parse(key), CryptoJS.enc.Latin1.parse(helpers.arrayToString(data)));
-        return helpers.stringToArray(encrypted.toString(CryptoJS.enc.Latin1));
+        var k = CryptoJS.enc.Latin1.parse(key).toString(CryptoJS.enc.Hex);
+        var d = CryptoJS.enc.Latin1.parse(helpers.arrayToString(data)).toString(CryptoJS.enc.Hex)
+        var shaObj = new jsSHA(d, "HEX");
+        var enc = shaObj.getHMAC(k, "HEX", "SHA-1", "B64");
+        return helpers.stringToArray(CryptoJS.enc.Base64.parse(enc).toString(CryptoJS.enc.Latin1));
     }
 }
 

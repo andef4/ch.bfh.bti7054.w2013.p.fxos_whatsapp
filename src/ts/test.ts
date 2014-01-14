@@ -1,28 +1,50 @@
 /// <reference path="../lib/cryptojs.d.ts" />
+/// <reference path="../lib/jssha.d.ts" />
 import CryptoJS = require("crypto-js");
 import security = require("./security");
 import helpers = require("./helpers");
 import platform = require("./platform_node");
 
+import jsSHA = require("jssha");
+
+
+/*
+Test: HMAC
+
+var k = CryptoJS.enc.Base64.parse('myNv1TpnMmjFnuGrLS30TouOzVA=').toString(CryptoJS.enc.Latin1); // 20
+var buf = CryptoJS.enc.Base64.parse('M2iKiFQQfYkkBEy8wW/1PCWBk852d5+Llog8THygYsm5t2lBb0JE/i8=').toString(CryptoJS.enc.Latin1);
+var encrypted = CryptoJS.enc.Base64.parse('tL/YbDNoiohUEH2JJARMvMFv9TwlgZPOdnefi5aIPEx8oGLJubdpQW9CRP4v').toString(CryptoJS.enc.Latin1); // 45
+
+
+
+//var shaObj = new jsSHA(CryptoJS.enc.Latin1.parse(buf).toString(CryptoJS.enc.Hex), "HEX");
+//var enc = shaObj.getHMAC(CryptoJS.enc.Latin1.parse(k).toString(CryptoJS.enc.Hex), "HEX", "SHA-1", "HEX");
+
+
+var enc = new platform.NodeCrypto().HmacSHA1(k, helpers.stringToArray(buf));
+
+console.log(encrypted);
+//console.log(enc);
+console.log(helpers.arrayToString(enc));
+*/
+
+
+/*
+Test: RC4
+
 var k = CryptoJS.enc.Base64.parse('myNv1TpnMmjFnuGrLS30TouOzVA=').toString(CryptoJS.enc.Latin1); // 20
 var authBlob = CryptoJS.enc.Base64.parse('NDE3NzQ0MjMxOTAvu692M3jmUdIncjRZO4DBBl20IDEzODk1NzIzMTQ=').toString(CryptoJS.enc.Latin1); // 45
 var encrypted = CryptoJS.enc.Base64.parse('tL/YbDNoiohUEH2JJARMvMFv9TwlgZPOdnefi5aIPEx8oGLJubdpQW9CRP4v').toString(CryptoJS.enc.Latin1); // 45
 
-
-/*var keystream = new security.KeyStream(new platform.NodeCrypto(), k);
+var keystream = new security.KeyStream(new platform.NodeCrypto(), k);
 var ab = helpers.stringToArray(authBlob);
 var enc = helpers.arrayToString(keystream.encrypt(ab, 4, 0));
+
+console.log("python:" + encrypted);
+console.log("js    :" + enc);
+
+console.log(enc == encrypted);
 */
-
-//console.log(CryptoJS.enc.Latin1.parse(enc).toString(CryptoJS.enc.Hex));
-//var rc4 = CryptoJS.algo.RC4Drop.createEncryptor(CryptoJS.enc.Latin1.parse(k), {drop: 256*4});
-//var e = rc4.process(authBlob).toString(CryptoJS.enc.Hex);
-
-var rc4 = new security.RC4Drop(k, 256);
-var e = CryptoJS.enc.Latin1.parse(helpers.arrayToString(rc4.cipher(helpers.stringToArray(authBlob)))).toString(CryptoJS.enc.Latin1);
-
-console.log(encrypted);
-console.log(e);
 
 /*
 Test: keyFromPasswordNonce
