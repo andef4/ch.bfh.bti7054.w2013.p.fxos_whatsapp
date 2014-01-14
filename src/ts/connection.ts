@@ -7,21 +7,21 @@ import helpers = require("./helpers");
 
 enum ConnectionState {CONNECTED, CHALLENGE_SENT};
 
-export class WhatsAppConnection implements ISocketHandler{
+export class WhatsAppConnection {
     
     private platform: IPlatform;
     private socket: ISocket = null;
     private outKeyStream: security.KeyStream = null;
     private inKeyStream: security.KeyStream = null;
     private state: ConnectionState = null;
-    onauth: {(): void};
     
+    onauth: {(): void};
     
     constructor(platform: IPlatform) {
         this.platform = platform;
     }
     
-    ondata(data: Uint8Array) {
+    private onSocketData(data: Uint8Array) {
         var packets = network.parsePackets(this.inKeyStream, data);
         if (this.state == ConnectionState.CONNECTED) {
             var reader = new network.PacketReader(packets[1]);
@@ -45,10 +45,16 @@ export class WhatsAppConnection implements ISocketHandler{
                 var reader = new network.PacketReader(packets[i]);
                 console.log(reader.readBinaryXml());
             }
+            this.state = ConnectionState.CONNECTED;
+        } else {
+            for(var i = 0; i < packets.length; i++) {
+                var reader = new network.PacketReader(packets[i]);
+                console.log(reader.readBinaryXml());
+            }
         }
     }
     
-    onconnect() {
+    private onSocketConnect() {
         var data = packet_factory.helloPacket();
         this.socket.write(data);
         
@@ -64,8 +70,16 @@ export class WhatsAppConnection implements ISocketHandler{
         this.state = ConnectionState.CONNECTED;
     }
     
-    connect() {
+    connect():void {
         this.socket = this.platform.getSocket();
-        this.socket.connect(this, constants.HOST, constants.PORT);
+        this.socket.onconnect = () => { this.onSocketConnect(); };
+        this.socket.ondata = (data: Uint8Array) => { this.onSocketData(data); };
+        this.socket.connect(constants.HOST, constants.PORT);
     }
+    
+    fetchContacts(): void {
+        
+    }
+    
+    
 }

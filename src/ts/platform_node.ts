@@ -44,11 +44,13 @@ export class NodeContacts implements IContacts {
 
 export class NodeSocket implements ISocket {
     private socket: net.NodeSocket;
+    onconnect: () => void;
+    ondata: (data: Uint8Array) => void;
     
-    connect(handler: ISocketHandler, host: string, port: number): void {
+    connect(host: string, port: number): void {
         this.socket = net.connect(port, host);
-        this.socket.on("connect", () => handler.onconnect());
-        this.socket.on("data", (data: NodeBuffer) => handler.ondata(NodeSocket.bufferToArray(data)));
+        this.socket.on("connect", () => this.onconnect());
+        this.socket.on("data", (data: NodeBuffer) => this.ondata(NodeSocket.bufferToArray(data)));
     }
     write(data: Uint8Array): void {
         this.socket.write(NodeSocket.arrayToBuffer(data));

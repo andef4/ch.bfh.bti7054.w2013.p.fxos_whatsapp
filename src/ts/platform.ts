@@ -6,13 +6,11 @@ interface IContacts {
     getContacts(): Array<String>;
 }
 
-interface ISocketHandler {
-    onconnect(): void;
-    ondata(data: Uint8Array): void;
-}
-
 interface ISocket {
-    connect(handler: ISocketHandler, host: string, port: number): void;
+    onconnect: () => void;
+    ondata: (data: Uint8Array) => void;
+    
+    connect(host: string, port: number): void;
     write(data: Uint8Array): void;
 }
 
