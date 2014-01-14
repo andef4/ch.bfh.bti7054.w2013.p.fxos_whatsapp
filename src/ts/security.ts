@@ -37,7 +37,7 @@ export class KeyStream {
     }
     
     decrypt(data: Uint8Array): Uint8Array {
-        return null;
+        return this.rc4.cipher(data);
     }
     
     encrypt(data: Uint8Array, dataOffset: number, macOffset: number): Uint8Array {
