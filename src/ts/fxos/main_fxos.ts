@@ -21,3 +21,4 @@ var packet = auth.auth(credentials.username, credentials.password);
 //var str = print(packet);
 //document.getElementById("content").innerHTML = str;
 
+console.log("out");

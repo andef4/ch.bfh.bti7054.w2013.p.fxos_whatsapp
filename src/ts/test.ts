@@ -1,3 +1,4 @@
+/*
 /// <reference path="../lib/cryptojs.d.ts" />
 /// <reference path="../lib/jssha.d.ts" />
 import CryptoJS = require("crypto-js");
@@ -6,7 +7,7 @@ import helpers = require("./helpers");
 import platform = require("./platform_node");
 
 import jsSHA = require("jssha");
-
+*/
 
 /*
 Test: HMAC

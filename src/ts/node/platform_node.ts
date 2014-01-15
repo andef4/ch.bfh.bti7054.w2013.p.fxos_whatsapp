@@ -1,9 +1,10 @@
-/// <reference path="../lib/cryptojs.d.ts" />
+/// <reference path="../../lib/cryptojs.d.ts" />
+/// <reference path="../../lib/jssha.d.ts" />
 import CryptoJS = require("crypto-js");
 import net = require("net");
-import credentials = require("./credentials");
-import helpers = require("./helpers");
 import jsSHA = require("jssha");
+import credentials = require("../credentials");
+import helpers = require("../helpers");
 
 export class NodePlatform implements IPlatform {
     getCrypto() {

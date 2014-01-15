@@ -4,6 +4,6 @@
 /skulpt/
 /yowsup/
 /src/out_node/
-/src/out_browser/
+/src/out_fxos/
 credentials.js
 credentials.ts
