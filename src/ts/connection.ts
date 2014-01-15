@@ -14,6 +14,7 @@ export class WhatsAppConnection {
     private outKeyStream: security.KeyStream = null;
     private inKeyStream: security.KeyStream = null;
     private state: ConnectionState = null;
+    private currentMessageId = 1;
     
     onconnect: {(): void};
     oncontacts: {(contacts: Array<string>): void};
@@ -87,7 +88,13 @@ export class WhatsAppConnection {
     }
     
     sendMessage(to: string, message: string): void {
+        var messageId = Math.floor(new Date().getTime() / 1000).toString();
+        messageId += "-";
+        messageId += this.currentMessageId;
+        this.currentMessageId++;
         
+        var packet = packet_factory.messageChatPacket(to, message, messageId);
+        this.socket.write(packet.serialize());
     }
     
     

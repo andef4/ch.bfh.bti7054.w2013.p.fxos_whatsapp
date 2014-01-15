@@ -17,6 +17,7 @@ conn.oncontacts = (contacts: Array<string>) => {
 
 conn.onmessage = (from: string, message: string) => {
     console.log(from + ": " + message);
+    conn.sendMessage(from, message);
 }
 
 conn.connect();

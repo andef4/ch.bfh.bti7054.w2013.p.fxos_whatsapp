@@ -1,5 +1,6 @@
 import network = require("./network");
 import constants = require("./constants");
+import helpers = require("./helpers");
 
 export function helloPacket(): Uint8Array {
     var packet = new Uint8Array(4);
@@ -49,5 +50,17 @@ export function challengePacket(authBlob: Uint8Array): network.Packet {
         xmlns: "urn:ietf:params:xml:ns:xmpp-sasl",
     }, [], authBlob);
     packet.writeBinaryXml(auth);
+    return packet;
+}
+
+export function messageChatPacket(to: string, message: string, msgId: string): network.Packet {
+    var packet = new network.Packet();
+    
+    var server = new network.Node("server");
+    var x = new network.Node("x", {"xmlns":"jabber:x:event"}, [server]);
+    var body = new network.Node("body", {}, [], helpers.stringToArray(message));
+    var xml = new network.Node("message", {"to": to, "type": "chat", "id": msgId}, [body, x]);
+    
+    packet.writeBinaryXml(xml);
     return packet;
 }
