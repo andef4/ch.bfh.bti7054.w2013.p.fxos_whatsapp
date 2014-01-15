@@ -215,7 +215,9 @@ export class PacketReader {
                 token = this.readInt8();
                 return constants.DICTIONARY[token + 245];
             case constants.JID_PAIR:
-                throw "JID Pair read in readString not implemented";
+                var username = this.readString(this.readInt8());
+                var server = this.readString(this.readInt8());
+                return username + "@" + server
         }
         throw "Bad token in readString";
     }
