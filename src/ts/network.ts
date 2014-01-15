@@ -10,15 +10,35 @@ export class Node {
 export class Packet {
     private packet: number[] = [];
     
-    serialize(): Uint8Array {
+    serialize(outKeyStream: security.KeyStream = null): Uint8Array {
         var len = this.packet.length;
-        var array = new Uint8Array(len + 3);
-        array[0] = (len & 0xFF0000) >> 16;
+        var array: Uint8Array;
+        var num: number;
+        
+        if (outKeyStream != null) {
+            console.log("ENCRYPED ---------------------------------------");
+            num = 1
+            var plain = new Uint8Array(len);
+            for (var i = 0; i < this.packet.length; i++) {
+                plain[i] = this.packet[i];
+            }
+            len += 4 // additional space for hmac
+            array = new Uint8Array(len + 3); // len + packet header
+            var encrypted = outKeyStream.enc(plain, 0, plain.length);
+            for (var i = 0; i < encrypted.length; i++) {
+                array[i+3] = encrypted[i];
+            }
+        } else {
+            num = 0
+            array = new Uint8Array(len + 3); // len + packet header
+            for (var i = 0; i < this.packet.length; i++) {
+                array[i+3] = this.packet[i];
+            }
+        }
+        array[0] = (((num << 4) | (len & 0xFF0000)) >> 16) % 256;
         array[1] = (len & 0xFF00) >> 8;
         array[2] = (len & 0xFF);
-        for(var i = 0; i < this.packet.length; i++) {
-            array[i+3] = this.packet[i];
-        }
+        //console.log(array);
         return array;
     }
     

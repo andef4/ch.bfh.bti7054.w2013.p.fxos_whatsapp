@@ -54,6 +54,28 @@ export class KeyStream {
         }
         return ret;
     }
+    
+    enc(data: Uint8Array, dataOffset: number, macOffset: number): Uint8Array {
+        var encryptedData = this.rc4.cipher(data);
+        var hmac = this.crypto.HmacSHA1(this.key, encryptedData);
+
+        var ret = new Uint8Array(data.length + 4);
+        
+        for (var i = 0; i < ret.length; i++) {
+            ret[i] = 0;
+        }
+        
+        for (var i = 0; i < encryptedData.length; i++) {
+            ret[i] = encryptedData[i];
+        }
+        console.log(encryptedData);
+        console.log(ret);
+        for (var i = 0; i < 4; i++) {
+            ret[i + macOffset] = hmac[i];
+        }
+        //console.log(ret);
+        return ret;
+    }
 }
 
 

@@ -45,16 +45,20 @@ export class WhatsAppConnection {
             this.state = ConnectionState.CHALLENGE_SENT;
         } else if(this.state == ConnectionState.CHALLENGE_SENT) {
             for(var i = 0; i < packets.length; i++) {
-                var reader = new network.PacketReader(packets[i]);
-                var xml = reader.readBinaryXml();
-                
-                // parse chat message between two users
-                if (xml.name == "message" && xml.attrs["type"] == "chat") {
-                    xml.childs.forEach((child: network.Node) => {
-                        if (child.name == "body") {
-                            this.onmessage(xml.attrs["from"], helpers.arrayToString(child.data));
-                        }
-                    });
+                try {
+                    var reader = new network.PacketReader(packets[i]);
+                    var xml = reader.readBinaryXml();
+                    
+                    // parse chat message between two users
+                    if (xml.name == "message" && xml.attrs["type"] == "chat") {
+                        xml.childs.forEach((child: network.Node) => {
+                            if (child.name == "body") {
+                                this.onmessage(xml.attrs["from"], helpers.arrayToString(child.data));
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.log(e);
                 }
             }
         }
@@ -94,7 +98,7 @@ export class WhatsAppConnection {
         this.currentMessageId++;
         
         var packet = packet_factory.messageChatPacket(to, message, messageId);
-        this.socket.write(packet.serialize());
+        this.socket.write(packet.serialize(this.outKeyStream));
     }
     
     
