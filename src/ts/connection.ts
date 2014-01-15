@@ -5,7 +5,7 @@ import packet_factory = require("./packet_factory");
 import network = require("./network");
 import helpers = require("./helpers");
 
-enum ConnectionState {CONNECTED, CHALLENGE_SENT};
+enum ConnectionState {CONNECTED, CHALLENGE_SENT, AUTHENTICATED};
 
 export class WhatsAppConnection {
     
@@ -15,7 +15,9 @@ export class WhatsAppConnection {
     private inKeyStream: security.KeyStream = null;
     private state: ConnectionState = null;
     
-    onauth: {(): void};
+    onconnect: {(): void};
+    oncontacts: {(contacts: Array<string>): void};
+    onmessage: {(from: string, message: string): void};
     
     constructor(platform: IPlatform) {
         this.platform = platform;
@@ -45,7 +47,7 @@ export class WhatsAppConnection {
                 var reader = new network.PacketReader(packets[i]);
                 console.log(reader.readBinaryXml());
             }
-            this.state = ConnectionState.CONNECTED;
+            this.state = ConnectionState.AUTHENTICATED;
         } else {
             for(var i = 0; i < packets.length; i++) {
                 var reader = new network.PacketReader(packets[i]);
@@ -81,5 +83,7 @@ export class WhatsAppConnection {
         
     }
     
-    
+    sendMessage(to: string, message: string): void {
+        
+    }
 }
