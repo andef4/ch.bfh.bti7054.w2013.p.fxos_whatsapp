@@ -62,6 +62,5 @@ $(document).ready(() => {
 });
 
 $('#login-button').on('click', () => {
-    console.log('connection');
     client.connect();
 });

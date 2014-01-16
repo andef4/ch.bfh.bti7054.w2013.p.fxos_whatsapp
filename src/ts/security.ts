@@ -1,6 +1,7 @@
 import helpers = require("./helpers");
 
 export function keyFromPasswordNonce(crypto: ICrypto, password: string, nonce: string): string {
+    console.log('key');
     return crypto.PBKDF2(password, nonce, 5, 16);
 }
 
