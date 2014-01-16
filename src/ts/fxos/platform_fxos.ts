@@ -46,14 +46,12 @@ export class FirefoxOSSocket implements ISocket {
     ondata: (data: Uint8Array) => void;
     
     connect(host: string, port: number): void {
-        this.socket = navigator.mozTCPSocket.open(host, port);
+        this.socket = navigator.mozTCPSocket.open(host, port, {binaryType: 'arraybuffer'});
         this.socket.onopen = () => this.onconnect();
-        this.socket.ondata = (event) => alert(event.data);
-        
-        //this.socket.ondata = (event) => this.ondata(event.data);
+        this.socket.ondata = (event) => this.ondata(new Uint8Array(event.data));
     }
     write(data: Uint8Array): void {
-        this.socket.send(data);
+        this.socket.send(data.buffer);
     }
 }
 
