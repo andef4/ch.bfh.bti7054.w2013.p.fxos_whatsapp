@@ -124,7 +124,10 @@ export class Packet {
     }
     
     writeJID(jid: string): void {
-        
+        this.writeInt8(constants.JID_PAIR);
+        var splits = jid.split('@');
+        this.writeString(splits[0]);
+        this.writeString(splits[1]);
     }
 }
 
