@@ -30,10 +30,9 @@ class Client {
         this.connection = new connection.WhatsAppConnection(new platform.FirefoxOSPlatform());
         
         this.connection.onmessage = (from: string, message: string) => {
-            $('#page').html(from + ': ' + message);
+            //$('#page').html(from + ': ' + message);
         }
         this.connection.onconnect = () => {
-            alert('connected');
             this.render_contacts();
         }
     }
@@ -48,7 +47,6 @@ class Client {
     }
     
     render_contacts() {
-        console.log('render contacts');
         var context = {
             contacts: this.contacts
         };

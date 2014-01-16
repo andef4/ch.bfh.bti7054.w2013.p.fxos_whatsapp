@@ -17,7 +17,6 @@ export class WhatsAppConnection {
     private currentMessageId = 1;
     
     onconnect: {(): void};
-    oncontacts: {(contacts: Array<string>): void};
     onmessage: {(from: string, message: string): void};
     
     constructor(platform: IPlatform) {
@@ -43,6 +42,7 @@ export class WhatsAppConnection {
             var challengePacket = packet_factory.challengePacket(authBlob);
             this.socket.write(challengePacket.serialize());
             this.state = ConnectionState.CHALLENGE_SENT;
+            this.onconnect();
         } else if(this.state == ConnectionState.CHALLENGE_SENT) {
             for(var i = 0; i < packets.length; i++) {
                 var reader = new network.PacketReader(packets[i]);
