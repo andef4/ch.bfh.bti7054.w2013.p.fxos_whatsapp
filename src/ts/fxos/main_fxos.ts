@@ -16,6 +16,12 @@ class Client {
     
     private connection: connection.WhatsAppConnection;
     
+    
+    private contacts = {
+        "41796649940": {name: "Fabio Anderegg", messages: [], unread_messages: false},
+        "41796779358": {name: "Matthias Gasser", messages: [], unread_messages: false}
+    }
+    
     constructor() {
         this.contacts_template = Handlebars.compile($('#contacts-template').html());
         this.chat_template = Handlebars.compile($('#chat-template').html());
@@ -25,6 +31,10 @@ class Client {
         
         this.connection.onmessage = (from: string, message: string) => {
             $('#page').html(from + ': ' + message);
+        }
+        this.connection.onconnect = () => {
+            alert('connected');
+            this.render_contacts();
         }
     }
     
@@ -38,17 +48,16 @@ class Client {
     }
     
     render_contacts() {
+        console.log('render contacts');
         var context = {
-            contacts: [
-                {name: 'fabio', tel: '+41796649940'},
-                {name: 'fritz', tel: '+41796649940'}
-            ]
+            contacts: this.contacts
         };
-        $('#page').html(this.contacts_template(context));
+        $("#page").html(this.contacts_template(context));
         this.current_page = Page.CONTACTS;
     }
     
-    render_chat(jid: string) {
+    render_chat(username: string) {
+        this.chat_template(this.contacts[username]);
         this.current_page = Page.CHAT;
     }
     
@@ -59,8 +68,20 @@ var client: Client;
 $(document).ready(() => {
     client = new Client();
     client.render_login();
+    //client.render_contacts();
 });
 
 $('#login-button').on('click', () => {
     client.connect();
 });
+
+$(".contact").on("click", function() {
+    var username = $(this).attr("data-username");
+    client.render_chat(username);
+});
+
+$('.navbar-brand').on("click", () => {
+    client.render_contacts();
+});
+
+

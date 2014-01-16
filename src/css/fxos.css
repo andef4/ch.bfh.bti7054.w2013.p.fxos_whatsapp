@@ -1,1 +1,12 @@
-body { padding-top: 50px; }
+body { padding-top: 60px; }
+
+#login-button {
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 50px;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 5px;
+    line-height: 50px;
+}
