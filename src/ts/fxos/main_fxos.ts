@@ -18,14 +18,19 @@ class Client {
     
     
     private contacts = {
-        "41796649940": {name: "Fabio Anderegg", messages: [], unread_messages: false},
-        "41796779358": {name: "Matthias Gasser", messages: [], unread_messages: false}
+        "41796649940": {name: "Fabio Anderegg", messages: [
+            {text: "Hallo Welt", direction: "out"},
+            {text: "1234", direction: "in"},
+            {text: "Welcome back", direction: "out"},
+            {text: "Test", direction: "out"},
+        ], unread_messages: false},
+        "41796779358": {name: "Matthias Gasser", messages: [], unread_messages: true}
     }
     
     constructor() {
-        this.contacts_template = Handlebars.compile($('#contacts-template').html());
-        this.chat_template = Handlebars.compile($('#chat-template').html());
-        this.login_template = Handlebars.compile($('#login-template').html());
+        this.contacts_template = Handlebars.compile($("#contacts-template").html());
+        this.chat_template = Handlebars.compile($("#chat-template").html());
+        this.login_template = Handlebars.compile($("#login-template").html());
         
         this.connection = new connection.WhatsAppConnection(new platform.FirefoxOSPlatform());
         
@@ -54,8 +59,8 @@ class Client {
         this.current_page = Page.CONTACTS;
     }
     
-    render_chat(username: string) {
-        this.chat_template(this.contacts[username]);
+    render_chat(tel: string) {
+        $("#page").html(this.chat_template(this.contacts[tel]));
         this.current_page = Page.CHAT;
     }
     
@@ -65,8 +70,9 @@ var client: Client;
 
 $(document).ready(() => {
     client = new Client();
-    client.render_login();
+    //client.render_login();
     //client.render_contacts();
+    client.render_chat("41796649940");
 });
 
 $('#login-button').on('click', () => {
@@ -74,8 +80,8 @@ $('#login-button').on('click', () => {
 });
 
 $(".contact").on("click", function() {
-    var username = $(this).attr("data-username");
-    client.render_chat(username);
+    var tel = $(this).attr("data-tel");
+    client.render_chat(tel);
 });
 
 $('.navbar-brand').on("click", () => {

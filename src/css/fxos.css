@@ -1,13 +1,36 @@
-body { padding-top: 60px; }
+body { padding-top: 50px; }
 
 #login-button {
-    width: 150px;
     margin-left: auto;
     margin-right: auto;
-    height: 50px;
-    text-align: center;
-    border: 1px solid black;
-    border-radius: 5px;
-    line-height: 50px;
-    cursor: pointer;
+    margin-top: 100px;
+    width: 150px;
+    display: block;
+}
+
+.contact-button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.message {
+    width: 80%;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    padding: 5px;
+}
+
+.message.out {
+    background-color: #5CB85C;
+    border: 1px solid #4CAE4C;
+    color: #FFFFFF;
+    float: right;
+}
+
+.message.in {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    color: #333333;
+    float: left;
 }

@@ -5,21 +5,25 @@
         <title> TypeScript Greeter </title>
         
         <link rel="stylesheet" type="text/css" href="../lib/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="../lib/bootstrap-theme.min.css" />
         <link rel="stylesheet" type="text/css" href="../css/fxos.css" />
         
         
         <script id="contacts-template" type="text/x-handlebars-template">
-        <h1>contacts</h1>
-        {
+            <h3>Kontakte</h3>
+            {{#each contacts}}
+                <button type="button" class="btn {{^this.unread_messages}}btn-default{{/this.unread_messages}} {{#this.unread_messages}}btn-success{{/this.unread_messages}} contact-button" data-tel="{{@key}}">{{ this.name }}</button>
+            {{/each}}
         </script>
         
         <script id="chat-template" type="text/x-handlebars-template">
-            <h1>chat</h1>
+            <h3>{{name}}</h3>
+            {{#each messages}}
+                <div class="message {{direction}}">{{text}}</div>
+            {{/each}}
         </script>
         
         <script id="login-template" type="text/x-handlebars-template">
-            <div id="login-button">Connect</div>
+            <button type="button" id="login-button" class="btn btn-primary">Login</button>
         </script>
         
     </head>
