@@ -94,7 +94,7 @@ export class WhatsAppConnection {
         this.currentMessageId++;
         
         var packet = packet_factory.messageChatPacket(to, message, messageId);
-        this.socket.write(packet.serialize());
+        this.socket.write(packet.serialize(this.outKeyStream));
     }
     
     
