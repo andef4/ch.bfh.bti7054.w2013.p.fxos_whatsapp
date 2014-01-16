@@ -50,6 +50,8 @@ export class WhatsAppConnection {
                 
                 // parse chat message between two users
                 if (xml.name == "message" && xml.attrs["type"] == "chat") {
+                    var ackPacket = packet_factory.messageAck(xml.attrs["from"], xml.attrs["id"]);
+                    this.socket.write(ackPacket.serialize(this.outKeyStream));
                     xml.childs.forEach((child: network.Node) => {
                         if (child.name == "body") {
                             this.onmessage(xml.attrs["from"], helpers.arrayToString(child.data));
@@ -96,6 +98,4 @@ export class WhatsAppConnection {
         var packet = packet_factory.messageChatPacket(to, message, messageId);
         this.socket.write(packet.serialize(this.outKeyStream));
     }
-    
-    
 }

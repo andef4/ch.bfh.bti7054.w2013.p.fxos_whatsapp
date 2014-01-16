@@ -64,3 +64,11 @@ export function messageChatPacket(to: string, message: string, msgId: string): n
     packet.writeBinaryXml(xml);
     return packet;
 }
+
+export function messageAck(to: string, msgId: string) {
+    var packet = new network.Packet();
+    var received = new network.Node("received", {xmlns: "urn:xmpp:receipts"});
+    var message = new network.Node("message", {to: to, type: "chat", id: msgId}, [received]);
+    packet.writeBinaryXml(message);
+    return packet;
+}
