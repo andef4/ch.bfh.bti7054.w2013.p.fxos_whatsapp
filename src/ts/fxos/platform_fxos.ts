@@ -20,12 +20,6 @@ export class FirefoxOSPlatform implements IPlatform {
 
 export class FirefoxOSCrypto implements ICrypto {
     PBKDF2(password: string, salt: string, keySize: number, iterations: number): string {
-        
-        console.log(CryptoJS);
-        console.log(CryptoJS.enc);
-        console.log(CryptoJS.enc.Latin1);
-        console.log(CryptoJS.PBKDF2);
-        
         var pw = CryptoJS.enc.Latin1.parse(password);
         var s = CryptoJS.enc.Latin1.parse(salt);
         return CryptoJS.PBKDF2(pw, s, {keySize: keySize, iterations: iterations}).toString(CryptoJS.enc.Latin1);
@@ -66,12 +60,6 @@ export class FirefoxOSCredentials implements ICredentials {
         return credentials.username;
     }
     getPassword(): string {
-        console.log(CryptoJS);
-        console.log(CryptoJS.enc);
-        console.log(CryptoJS.enc.Latin1);
-        console.log(CryptoJS.enc.Base64);
-        console.log(CryptoJS.PBKDF2);
-        
         return CryptoJS.enc.Base64.parse(credentials.password).toString(CryptoJS.enc.Latin1);
     }
 }
