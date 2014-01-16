@@ -1,3 +1,39 @@
+import network = require("./network");
+import constants = require("./constants");
+import helpers = require("./helpers");
+
+
+
+var to = '41796649940@s.whatsapp.net';
+var msgId = '1389872325-1';
+var message = 'test';
+
+
+
+
+var packet = new network.Packet();
+
+var server = new network.Node("server");
+var x = new network.Node("x", {"xmlns":"jabber:x:event"}, [server]);
+var body = new network.Node("body", {}, [], helpers.stringToArray(message));
+var xml = new network.Node("message", {"to": to, "type": "chat", "id": msgId}, [body, x]);
+
+packet.writeBinaryXml(xml);
+var data = packet.serialize();
+
+for (var i = 0; i < data.length; i++) {
+    console.log(data[i]);
+}
+
+
+var node_packet = [248, 8, 111, 200, 250, 252, 11, 52, 49, 55, 57, 54, 54, 52, 57, 57, 52, 48, 171, 203, 28, 77, 252, 12, 49, 51, 56, 57, 56, 55, 50, 51, 50, 53, 45, 49, 248, 2, 248, 4, 230, 232, 92, 248, 1, 248, 1, 174, 248, 2, 23, 252, 4, 116, 101, 115, 116]
+
+//console.log(node_packet);
+
+
+
+
+
 /*
 /// <reference path="../lib/cryptojs.d.ts" />
 /// <reference path="../lib/jssha.d.ts" />
