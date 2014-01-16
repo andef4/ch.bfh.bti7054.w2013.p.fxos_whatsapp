@@ -1,0 +1,10 @@
+{
+  "name": "WhatsApp",
+  "launch_path": "/html/main.html",
+  "type": "privileged",
+  "permissions": {
+    "tcp-socket": {
+      "description": "Network Access"
+    }
+  }
+}
