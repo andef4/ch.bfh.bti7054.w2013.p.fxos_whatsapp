@@ -13,10 +13,10 @@ export class Packet {
     serialize(outKeyStream: security.KeyStream = null): Uint8Array {
         var len = this.packet.length;
         var array: Uint8Array;
-        var num: number;
+        var encryptedFlag: number;
         
         if (outKeyStream != null) {
-            num = 1
+            encryptedFlag = 1
             var plain = new Uint8Array(len);
             for (var i = 0; i < this.packet.length; i++) {
                 var tmp = this.packet[i]
@@ -30,14 +30,13 @@ export class Packet {
                 array[i+3] = tmp;
             }
         } else {
-            num = 0
+            encryptedFlag = 0
             array = new Uint8Array(len + 3); // len + packet header
             for (var i = 0; i < this.packet.length; i++) {
                 array[i+3] = this.packet[i];
             }
         }
-        //array[0] = (((num << 4) | (len & 0xFF0000)) >> 16) % 256;
-        array[0] = num << 4;
+        array[0] = ((encryptedFlag << 4) | (len & 0xFF0000) >> 16);
         array[1] = (len & 0xFF00) >> 8;
         array[2] = (len & 0xFF);
         return array;
