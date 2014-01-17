@@ -47,7 +47,8 @@ class Client {
     }
     
     render_login() {
-        $('#page').html(this.login_template());
+        $("#page").html(this.login_template());
+        $(".navbar-brand").html("WhatsApp");
         this.current_page = Page.LOGIN;
     }
     
@@ -56,11 +57,13 @@ class Client {
             contacts: this.contacts
         };
         $("#page").html(this.contacts_template(context));
+        $(".navbar-brand").html("WhatsApp - Kontake");
         this.current_page = Page.CONTACTS;
     }
     
     render_chat(tel: string) {
         $("#page").html(this.chat_template(this.contacts[tel]));
+        $(".navbar-brand").html("WhatsApp - " + this.contacts[tel].name);
         this.current_page = Page.CHAT;
     }
     

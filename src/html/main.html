@@ -2,24 +2,51 @@
 <html>
     <head>
         <meta charset="utf-8"> 
-        <title> TypeScript Greeter </title>
+        <title>WhatsApp</title>
         
         <link rel="stylesheet" type="text/css" href="../lib/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="../css/fxos.css" />
         
         
         <script id="contacts-template" type="text/x-handlebars-template">
-            <h3>Kontakte</h3>
-            {{#each contacts}}
-                <button type="button" class="btn {{^this.unread_messages}}btn-default{{/this.unread_messages}} {{#this.unread_messages}}btn-success{{/this.unread_messages}} contact-button" data-tel="{{@key}}">{{ this.name }}</button>
-            {{/each}}
+            <div class="container">
+                {{#each contacts}}
+                    <button type="button" class="btn {{^this.unread_messages}}btn-default{{/this.unread_messages}} {{#this.unread_messages}}btn-success{{/this.unread_messages}} contact-button" data-tel="{{@key}}">{{ this.name }}</button>
+                {{/each}}
+            <div class="container">
         </script>
         
         <script id="chat-template" type="text/x-handlebars-template">
-            <h3>{{name}}</h3>
-            {{#each messages}}
-                <div class="message {{direction}}">{{text}}</div>
-            {{/each}}
+            <div class="container">
+                {{#each messages}}
+                    <div class="message {{direction}}">{{text}}</div>
+                {{/each}}
+                {{#each messages}}
+                    <div class="message {{direction}}">{{text}}</div>
+                {{/each}}
+                {{#each messages}}
+                    <div class="message {{direction}}">{{text}}</div>
+                {{/each}}
+                {{#each messages}}
+                    <div class="message {{direction}}">{{text}}</div>
+                {{/each}}
+                {{#each messages}}
+                    <div class="message {{direction}}">{{text}}</div>
+                {{/each}}
+                {{#each messages}}
+                    <div class="message {{direction}}">{{text}}</div>
+                {{/each}}
+                {{#each messages}}
+                    <div class="message {{direction}}">{{text}}</div>
+                {{/each}}
+                {{#each messages}}
+                    <div class="message {{direction}}">{{text}}</div>
+                {{/each}}
+            </div>
+            <div id="chat-input">
+                <input type="text"></input>
+                <button type="button" class="btn btn-primary btn-sm">&#x27a4;</button>
+            </div>
         </script>
         
         <script id="login-template" type="text/x-handlebars-template">
@@ -34,9 +61,7 @@
             </div>
         </nav>
         
-        <div class="container">
-            <div id="page"></div>
-        </div>
+        <div id="page"></div>
         
         <script type="text/javascript" src="../lib/jquery.js"></script>
         <script type="text/javascript" src="../lib/handlebars.js"></script>
