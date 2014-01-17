@@ -35,8 +35,16 @@ class Client {
         this.connection = new connection.WhatsAppConnection(new platform.FirefoxOSPlatform());
         
         this.connection.onmessage = (from: string, message: string) => {
-            //$('#page').html(from + ': ' + message);
+            var tel = from.replace("@s.whatsapp.net", "");
+            this.contacts[tel].messages.push({text: message, direction: "in"});
+            if (this.current_page == Page.CONTACTS) {
+                this.contacts[tel]["unread_messages"] = true;
+                this.render_contacts();
+            } else if (this.current_page == Page.CHAT && $("#send-button").attr("data-tel") == tel) {
+                $(".container").append($('<div class="message in">' + message + '</div>'));
+            }
         }
+        
         this.connection.onconnect = () => {
             this.render_contacts();
         }
@@ -50,6 +58,7 @@ class Client {
         $("#page").html(this.login_template());
         $(".navbar-brand").html("WhatsApp");
         this.current_page = Page.LOGIN;
+        init();
     }
     
     render_contacts() {
@@ -59,36 +68,62 @@ class Client {
         $("#page").html(this.contacts_template(context));
         $(".navbar-brand").html("WhatsApp - Kontake");
         this.current_page = Page.CONTACTS;
+        init();
     }
     
     render_chat(tel: string) {
-        $("#page").html(this.chat_template(this.contacts[tel]));
+        this.contacts[tel]["unread_messages"] = false;
+        var context = {
+            messages: this.contacts[tel].messages,
+            tel: tel
+        }
+        $("#page").html(this.chat_template(context));
         $(".navbar-brand").html("WhatsApp - " + this.contacts[tel].name);
         this.current_page = Page.CHAT;
+        
+        scrollToBottom();
+        init();
     }
     
+    sendMessage(tel: string, text: string) {
+        console.log(tel);
+        console.log(tel + "@s.whatsapp.net");
+        this.connection.sendMessage(tel + "@s.whatsapp.net", text);
+    }
 }
 
 var client: Client;
 
 $(document).ready(() => {
     client = new Client();
-    //client.render_login();
-    //client.render_contacts();
-    client.render_chat("41796649940");
+    client.render_login();
+    init();
 });
 
-$('#login-button').on('click', () => {
-    client.connect();
-});
+function scrollToBottom() {
+    $("html, body").animate({ scrollTop: $(document).height() }, 0);
+}
 
-$(".contact").on("click", function() {
-    var tel = $(this).attr("data-tel");
-    client.render_chat(tel);
-});
-
-$('.navbar-brand').on("click", () => {
-    client.render_contacts();
-});
-
-
+function init() {
+    $("#login-button").on('click', () => {
+        client.connect();
+    });
+    
+    $(".contact-button").on("click", function() {
+        var tel = $(this).attr("data-tel");
+        client.render_chat(tel);
+    });
+    
+    $('.navbar-brand').on("click", () => {
+        client.render_contacts();
+    });
+    
+    $("#send-button").on("click", () => {
+        var text = $("#text-input").val();
+        var tel = $("#send-button").attr("data-tel");
+        client.sendMessage(tel, text);
+        $(".container").append($('<div class="message out">' + text + '</div>'));
+        $("#text-input").val("");
+        scrollToBottom();
+    });
+}

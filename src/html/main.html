@@ -21,31 +21,10 @@
                 {{#each messages}}
                     <div class="message {{direction}}">{{text}}</div>
                 {{/each}}
-                {{#each messages}}
-                    <div class="message {{direction}}">{{text}}</div>
-                {{/each}}
-                {{#each messages}}
-                    <div class="message {{direction}}">{{text}}</div>
-                {{/each}}
-                {{#each messages}}
-                    <div class="message {{direction}}">{{text}}</div>
-                {{/each}}
-                {{#each messages}}
-                    <div class="message {{direction}}">{{text}}</div>
-                {{/each}}
-                {{#each messages}}
-                    <div class="message {{direction}}">{{text}}</div>
-                {{/each}}
-                {{#each messages}}
-                    <div class="message {{direction}}">{{text}}</div>
-                {{/each}}
-                {{#each messages}}
-                    <div class="message {{direction}}">{{text}}</div>
-                {{/each}}
             </div>
             <div id="chat-input">
-                <input type="text"></input>
-                <button type="button" class="btn btn-primary btn-sm">&#x27a4;</button>
+                <input type="text" id="text-input"></input>
+                <button type="button" id="send-button" class="btn btn-primary btn-sm" data-tel="{{tel}}">&#x27a4;</button>
             </div>
         </script>
         
