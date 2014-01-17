@@ -24,7 +24,7 @@ class Client {
             {text: "Welcome back", direction: "out"},
             {text: "Test", direction: "out"},
         ], unread_messages: false},
-        "41796779358": {name: "Matthias Gasser", messages: [], unread_messages: true}
+        "41796779358": {name: "Matthias Gasser", messages: [], unread_messages: false}
     }
     
     constructor() {
@@ -37,6 +37,19 @@ class Client {
         this.connection.onmessage = (from: string, message: string) => {
             var tel = from.replace("@s.whatsapp.net", "");
             this.contacts[tel].messages.push({text: message, direction: "in"});
+            
+            if (document.visibilityState == "hidden" || (this.current_page == Page.CHAT && $("#send-button").attr("data-tel") != tel)) {
+                var notification = navigator.mozNotification.createNotification('WhatsApp', "Nachricht von " + this.contacts[tel].name);
+                notification.onclick = function() {
+                   navigator.mozApps.getSelf().onsuccess = function(evt) {
+                        var app = evt.target.result;
+                        app.launch();
+                    };
+                }
+                notification.show();
+                this.render_contacts();
+            }
+            
             if (this.current_page == Page.CONTACTS) {
                 this.contacts[tel]["unread_messages"] = true;
                 this.render_contacts();
