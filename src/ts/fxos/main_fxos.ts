@@ -18,12 +18,7 @@ class Client {
     
     
     private contacts = {
-        "41796649940": {name: "Fabio Anderegg", messages: [
-            {text: "Hallo Welt", direction: "out"},
-            {text: "1234", direction: "in"},
-            {text: "Welcome back", direction: "out"},
-            {text: "Test", direction: "out"},
-        ], unread_messages: false},
+        "41796649940": {name: "Fabio Anderegg", messages: [], unread_messages: false},
         "41796779358": {name: "Matthias Gasser", messages: [], unread_messages: false}
     }
     
@@ -41,13 +36,13 @@ class Client {
             if (document.visibilityState == "hidden" || (this.current_page == Page.CHAT && $("#send-button").attr("data-tel") != tel)) {
                 var notification = navigator.mozNotification.createNotification('WhatsApp', "Nachricht von " + this.contacts[tel].name);
                 notification.onclick = function() {
-                   navigator.mozApps.getSelf().onsuccess = function(evt) {
+                   navigator.mozApps.getSelf().onsuccess = (evt) => {
                         var app = evt.target.result;
                         app.launch();
+                        showContacts();
                     };
                 }
                 notification.show();
-                this.render_contacts();
             }
             
             if (this.current_page == Page.CONTACTS) {
@@ -99,9 +94,8 @@ class Client {
     }
     
     sendMessage(tel: string, text: string) {
-        console.log(tel);
-        console.log(tel + "@s.whatsapp.net");
         this.connection.sendMessage(tel + "@s.whatsapp.net", text);
+        this.contacts[tel].messages.push({text: text, direction: "out"});
     }
 }
 
@@ -112,6 +106,10 @@ $(document).ready(() => {
     client.render_login();
     init();
 });
+
+function showContacts() {
+    client.render_contacts;
+}
 
 function scrollToBottom() {
     $("html, body").animate({ scrollTop: $(document).height() }, 0);
