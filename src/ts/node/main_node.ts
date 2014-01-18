@@ -8,4 +8,8 @@ conn.onmessage = (from: string, message: string) => {
     conn.sendMessage(from, message);
 }
 
+conn.onconnect = () => {
+    console.log("connected");
+}
+
 conn.connect();
