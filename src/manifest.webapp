@@ -3,9 +3,10 @@
   "launch_path": "/html/main.html",
   "type": "privileged",
   "permissions": {
-    "tcp-socket": {
-      "description": "Network Access"
-    },
+    "tcp-socket": {},
     "desktop-notification": {}
+    "contacts" {
+        "access": "readonly"
+    }
   }
 }
