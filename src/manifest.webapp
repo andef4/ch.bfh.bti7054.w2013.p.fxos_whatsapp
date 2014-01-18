@@ -5,6 +5,7 @@
   "permissions": {
     "tcp-socket": {
       "description": "Network Access"
-    }
+    },
+    "desktop-notification": {}
   }
 }

@@ -15,7 +15,6 @@ class Client {
     
     private connection: connection.WhatsAppConnection;
     
-    
     private contacts = {};
     
     constructor() {
@@ -33,6 +32,19 @@ class Client {
         this.connection.onmessage = (from: string, message: string) => {
             var tel = from.replace("@s.whatsapp.net", "");
             this.contacts[tel].messages.push({text: message, direction: "in"});
+            
+            if (document.visibilityState == "hidden" || (this.current_page == Page.CHAT && $("#send-button").attr("data-tel") != tel)) {
+                var notification = navigator.mozNotification.createNotification('WhatsApp', "Nachricht von " + this.contacts[tel].name);
+                notification.onclick = function() {
+                   navigator.mozApps.getSelf().onsuccess = (evt) => {
+                        var app = evt.target.result;
+                        app.launch();
+                        showContacts();
+                    };
+                }
+                notification.show();
+            }
+            
             if (this.current_page == Page.CONTACTS) {
                 this.contacts[tel]["unread_messages"] = true;
                 this.render_contacts();
@@ -82,9 +94,8 @@ class Client {
     }
     
     sendMessage(tel: string, text: string) {
-        console.log(tel);
-        console.log(tel + "@s.whatsapp.net");
         this.connection.sendMessage(tel + "@s.whatsapp.net", text);
+        this.contacts[tel].messages.push({text: text, direction: "out"});
     }
 }
 
@@ -95,6 +106,10 @@ $(document).ready(() => {
     client.render_login();
     init();
 });
+
+function showContacts() {
+    client.render_contacts;
+}
 
 function scrollToBottom() {
     $("html, body").animate({ scrollTop: $(document).height() }, 0);
