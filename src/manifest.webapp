@@ -4,8 +4,8 @@
   "type": "privileged",
   "permissions": {
     "tcp-socket": {},
-    "desktop-notification": {}
-    "contacts" {
+    "desktop-notification": {},
+    "contacts": {
         "access": "readonly"
     }
   }

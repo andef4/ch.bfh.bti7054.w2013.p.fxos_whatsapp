@@ -66,8 +66,9 @@ class Client {
             var cursor = event.target;
             if (cursor.result) {
                 var name = cursor.result.givenName + " " + cursor.result.familyName;
-                var tel = cursor.result.tel[0].value;
+                var tel = cursor.result.tel[0].value.replace("+", "");
                 this.contacts[tel] = {name: name, messages: [], unread_messages: false};
+                cursor.continue();
             } else {
                 this.render_contacts();
             }
