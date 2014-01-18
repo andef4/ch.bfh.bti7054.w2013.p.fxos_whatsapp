@@ -1,6 +1,5 @@
 /// <reference path="../../lib/jquery.d.ts" />
 /// <reference path="../../lib/handlebars.d.ts" />
-
 import platform = require("./platform_fxos");
 import connection = require("../connection");
 
@@ -17,22 +16,19 @@ class Client {
     private connection: connection.WhatsAppConnection;
     
     
-    private contacts = {
-        "41796649940": {name: "Fabio Anderegg", messages: [
-            {text: "Hallo Welt", direction: "out"},
-            {text: "1234", direction: "in"},
-            {text: "Welcome back", direction: "out"},
-            {text: "Test", direction: "out"},
-        ], unread_messages: false},
-        "41796779358": {name: "Matthias Gasser", messages: [], unread_messages: true}
-    }
+    private contacts = {};
     
     constructor() {
         this.contacts_template = Handlebars.compile($("#contacts-template").html());
         this.chat_template = Handlebars.compile($("#chat-template").html());
         this.login_template = Handlebars.compile($("#login-template").html());
         
-        this.connection = new connection.WhatsAppConnection(new platform.FirefoxOSPlatform());
+        var fxos_platform = new platform.FirefoxOSPlatform();
+        for (var contact in fxos_platform.getContacts) {
+            this.contacts[contact.telephone] = {name: contact.name, messages: [], unread_messages: false};
+        }
+        
+        this.connection = new connection.WhatsAppConnection(fxos_platform);
         
         this.connection.onmessage = (from: string, message: string) => {
             var tel = from.replace("@s.whatsapp.net", "");

@@ -2,6 +2,7 @@
 /// <reference path="../../lib/jssha.d.ts" />
 import credentials = require("../credentials");
 import helpers = require("../helpers");
+import phone_contacts = require("./contacts");
 
 export class FirefoxOSPlatform implements IPlatform {
     getCrypto() {
@@ -35,8 +36,8 @@ export class FirefoxOSCrypto implements ICrypto {
 }
 
 export class FirefoxOSContacts implements IContacts {
-    getContacts(): Array<String> {
-        return null;
+    getContacts(): Array<Contact> {
+        return phone_contacts.contacts;
     }
 }
 

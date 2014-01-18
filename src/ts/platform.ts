@@ -2,8 +2,13 @@ interface ICrypto {
     PBKDF2(password: string, salt: string, keySize: number, iterations: number): string;
     HmacSHA1(key: string, data: Uint8Array);
 }
+
+class Contact {
+    constructor(public telephone: string, public name: string) {}
+}
+
 interface IContacts {
-    getContacts(): Array<String>;
+    getContacts(): Array<Contact>;
 }
 
 interface ISocket {

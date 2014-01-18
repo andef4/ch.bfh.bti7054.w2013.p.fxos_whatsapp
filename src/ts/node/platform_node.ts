@@ -38,8 +38,8 @@ export class NodeCrypto implements ICrypto {
 }
 
 export class NodeContacts implements IContacts {
-    getContacts(): Array<String> {
-        return null;
+    getContacts(): Array<Contact> {
+        return new Array<Contact>();
     }
 }
 
