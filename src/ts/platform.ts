@@ -1,17 +1,17 @@
-interface ICrypto {
+export interface ICrypto {
     PBKDF2(password: string, salt: string, keySize: number, iterations: number): string;
     HmacSHA1(key: string, data: Uint8Array);
 }
 
-class Contact {
+export class Contact {
     constructor(public telephone: string, public name: string) {}
 }
 
-interface IContacts {
+export interface IContacts {
     getContacts(): Array<Contact>;
 }
 
-interface ISocket {
+export interface ISocket {
     onconnect: () => void;
     ondata: (data: Uint8Array) => void;
     
@@ -19,12 +19,12 @@ interface ISocket {
     write(data: Uint8Array): void;
 }
 
-interface ICredentials {
+export interface ICredentials {
     getPassword(): string;
     getUsername(): string;
 }
 
-interface IPlatform {
+export interface IPlatform {
     getCrypto(): ICrypto;
     getContacts(): IContacts;
     getSocket(): ISocket;

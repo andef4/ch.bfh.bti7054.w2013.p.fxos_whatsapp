@@ -1,12 +1,13 @@
 /// <reference path="../../lib/cryptojs.d.ts" />
 /// <reference path="../../lib/jssha.d.ts" />
+import platform = require("../platform");
 import CryptoJS = require("crypto-js");
 import net = require("net");
 import jsSHA = require("jssha");
 import credentials = require("../credentials");
 import helpers = require("../helpers");
 
-export class NodePlatform implements IPlatform {
+export class NodePlatform implements platform.IPlatform {
     getCrypto() {
         return new NodeCrypto();
     }
@@ -21,7 +22,7 @@ export class NodePlatform implements IPlatform {
     }
 }
 
-export class NodeCrypto implements ICrypto {
+export class NodeCrypto implements platform.ICrypto {
     PBKDF2(password: string, salt: string, keySize: number, iterations: number): string {
         var pw = CryptoJS.enc.Latin1.parse(password);
         var s = CryptoJS.enc.Latin1.parse(salt);
@@ -37,13 +38,13 @@ export class NodeCrypto implements ICrypto {
     }
 }
 
-export class NodeContacts implements IContacts {
-    getContacts(): Array<Contact> {
-        return new Array<Contact>();
+export class NodeContacts implements platform.IContacts {
+    getContacts(): Array<platform.Contact> {
+        return new Array<platform.Contact>();
     }
 }
 
-export class NodeSocket implements ISocket {
+export class NodeSocket implements platform.ISocket {
     private socket: net.NodeSocket;
     onconnect: () => void;
     ondata: (data: Uint8Array) => void;
@@ -74,7 +75,7 @@ export class NodeSocket implements ISocket {
     }
 }
 
-export class NodeCredentials implements ICredentials {
+export class NodeCredentials implements platform.ICredentials {
     getUsername(): string {
         return credentials.username;
     }

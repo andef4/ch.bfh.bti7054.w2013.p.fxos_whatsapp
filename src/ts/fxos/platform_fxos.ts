@@ -1,10 +1,10 @@
 /// <reference path="../../lib/cryptojs.d.ts" />
 /// <reference path="../../lib/jssha.d.ts" />
+import platform = require("../platform");
 import credentials = require("../credentials");
 import helpers = require("../helpers");
-import phone_contacts = require("./contacts");
 
-export class FirefoxOSPlatform implements IPlatform {
+export class FirefoxOSPlatform implements platform.IPlatform {
     getCrypto() {
         return new FirefoxOSCrypto();
     }
@@ -19,7 +19,7 @@ export class FirefoxOSPlatform implements IPlatform {
     }
 }
 
-export class FirefoxOSCrypto implements ICrypto {
+export class FirefoxOSCrypto implements platform.ICrypto {
     PBKDF2(password: string, salt: string, keySize: number, iterations: number): string {
         var pw = CryptoJS.enc.Latin1.parse(password);
         var s = CryptoJS.enc.Latin1.parse(salt);
@@ -35,13 +35,13 @@ export class FirefoxOSCrypto implements ICrypto {
     }
 }
 
-export class FirefoxOSContacts implements IContacts {
-    getContacts(): Array<Contact> {
-        return phone_contacts.contacts;
+export class FirefoxOSContacts implements platform.IContacts {
+    getContacts(): Array<platform.Contact> {
+        return new Array<platform.Contact>();
     }
 }
 
-export class FirefoxOSSocket implements ISocket {
+export class FirefoxOSSocket implements platform.ISocket {
     private socket;
     onconnect: () => void;
     ondata: (data: Uint8Array) => void;
@@ -56,7 +56,7 @@ export class FirefoxOSSocket implements ISocket {
     }
 }
 
-export class FirefoxOSCredentials implements ICredentials {
+export class FirefoxOSCredentials implements platform.ICredentials {
     getUsername(): string {
         return credentials.username;
     }

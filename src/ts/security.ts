@@ -1,6 +1,7 @@
 import helpers = require("./helpers");
+import platform = require("./platform");
 
-export function keyFromPasswordNonce(crypto: ICrypto, password: string, nonce: string): string {
+export function keyFromPasswordNonce(crypto: platform.ICrypto, password: string, nonce: string): string {
     return crypto.PBKDF2(password, nonce, 5, 16);
 }
 
@@ -27,10 +28,10 @@ export function authBlob(username: string, nonce: string): Uint8Array {
 }
 
 export class KeyStream {
-    private crypto: ICrypto;
+    private crypto: platform.ICrypto;
     private rc4: RC4Drop;
     private key: string;
-    constructor(crypto: ICrypto, key: string) {
+    constructor(crypto: platform.ICrypto, key: string) {
         this.crypto = crypto;
         this.key = key;
         this.rc4 = new RC4Drop(key, 256);
@@ -58,7 +59,6 @@ export class KeyStream {
 
 
 export class RC4Drop {
-    
     private i = 0;
     private j = 0;
     private s = new  Array<number>();
@@ -110,52 +110,3 @@ export class RC4Drop {
     }
     
 }
-
-/*
-
-class RC4:
-        def __init__(self, key, drop):
-                self.s = []
-                self.i = 0;
-                self.j = 0;
-                
-                self.s = [0] * 256
-                
-                for i in range(0, len(self.s)):
-                        self.s[i] = i
-                
-                for i in range(0, len(self.s)):
-                        self.j = (self.j + self.s[i] + ord(key[i % len(key)])) % 256
-                        RC4.swap(self.s, i, self.j)
-                
-                self.j = 0;
-                
-                self.cipher(_bytearray(drop), 0, drop)
-        
-        
-        def cipher(self, data, offset, length):
-                while True:
-                        num = length
-                        length = num - 1
-                        
-                        if num == 0: break
-                        
-                        self.i = (self.i+1) % 256
-                        self.j = (self.j + self.s[self.i]) % 256
-                        
-                        RC4.swap(self.s, self.i, self.j)
-                        
-                        num2 = offset
-                        offset = num2 + 1
-                        
-                        data[num2] = ord(data[num2]) if type(data[num2]) == str else data[num2]
-                        data[num2] = (data[num2] ^ self.s[(self.s[self.i] + self.s[self.j]) % 256])
-        
-        @staticmethod
-        def swap(arr, i, j):
-                tmp = arr[i]
-                arr[i] = arr[j]
-                arr[j] = tmp
-*/
-
-

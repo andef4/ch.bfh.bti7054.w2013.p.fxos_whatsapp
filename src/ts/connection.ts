@@ -4,13 +4,14 @@ import security = require("./security");
 import packet_factory = require("./packet_factory");
 import network = require("./network");
 import helpers = require("./helpers");
+import platform = require("./platform");
 
 enum ConnectionState {CONNECTED, CHALLENGE_SENT, AUTHENTICATED};
 
 export class WhatsAppConnection {
     
-    private platform: IPlatform;
-    private socket: ISocket = null;
+    private platform: platform.IPlatform;
+    private socket: platform.ISocket = null;
     private outKeyStream: security.KeyStream = null;
     private inKeyStream: security.KeyStream = null;
     private state: ConnectionState = null;
@@ -19,7 +20,7 @@ export class WhatsAppConnection {
     onconnect: {(): void};
     onmessage: {(from: string, message: string): void};
     
-    constructor(platform: IPlatform) {
+    constructor(platform: platform.IPlatform) {
         this.platform = platform;
     }
     
