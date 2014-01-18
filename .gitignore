@@ -2,3 +2,5 @@ credentials.js
 credentials.ts
 contacts.ts
 contacts.js
+/src/out_node/
+/src/out_fxos/
