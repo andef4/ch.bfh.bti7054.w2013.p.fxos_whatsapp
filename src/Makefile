@@ -18,6 +18,6 @@ fxos:
 	tsc -m amd  --outDir out_fxos/ --sourcemap ts/*.ts ts/*/*.ts
 
 watch_fxos:
-	mkdir -p fxos_js/
+	mkdir -p out_fxos/
 	tsc -m amd --outDir out_fxos/ --sourcemap ts/*.ts ts/*/*.ts -w	
 
