@@ -26,6 +26,8 @@ class Client {
         
         this.connection = new connection.WhatsAppConnection(new platform.FirefoxOSPlatform());
         
+        
+        var self = this;
         this.connection.onmessage = (from: string, message: string) => {
             var tel = from.replace("@s.whatsapp.net", "");
             this.contacts[tel].messages.push({text: message, direction: "in"});
@@ -36,7 +38,7 @@ class Client {
                    navigator.mozApps.getSelf().onsuccess = (evt) => {
                         var app = evt.target.result;
                         app.launch();
-                        showContacts();
+                        self.renderChat(tel);
                     };
                 }
                 notification.show();
@@ -126,10 +128,6 @@ $(document).ready(() => {
     client.renderLogin();
     init();
 });
-
-function showContacts() {
-    client.renderContacts();
-}
 
 function scrollToBottom() {
     $("html, body").animate({ scrollTop: $(document).height() }, 0);
