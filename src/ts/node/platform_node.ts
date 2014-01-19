@@ -11,9 +11,6 @@ export class NodePlatform implements platform.IPlatform {
     getCrypto() {
         return new NodeCrypto();
     }
-    getContacts() {
-        return new NodeContacts();
-    }
     getSocket() {
         return new NodeSocket();
     }
@@ -35,12 +32,6 @@ export class NodeCrypto implements platform.ICrypto {
         var shaObj = new jsSHA(d, "HEX");
         var enc = shaObj.getHMAC(k, "HEX", "SHA-1", "B64");
         return helpers.stringToArray(CryptoJS.enc.Base64.parse(enc).toString(CryptoJS.enc.Latin1));
-    }
-}
-
-export class NodeContacts implements platform.IContacts {
-    getContacts(): Array<platform.Contact> {
-        return new Array<platform.Contact>();
     }
 }
 
@@ -83,4 +74,3 @@ export class NodeCredentials implements platform.ICredentials {
         return CryptoJS.enc.Base64.parse(credentials.password).toString(CryptoJS.enc.Latin1);
     }
 }
-

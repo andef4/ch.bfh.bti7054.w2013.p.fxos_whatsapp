@@ -8,9 +8,6 @@ export class FirefoxOSPlatform implements platform.IPlatform {
     getCrypto() {
         return new FirefoxOSCrypto();
     }
-    getContacts() {
-        return new FirefoxOSContacts();
-    }
     getSocket() {
         return new FirefoxOSSocket();
     }
@@ -32,12 +29,6 @@ export class FirefoxOSCrypto implements platform.ICrypto {
         var shaObj = new jsSHA(d, "HEX");
         var enc = shaObj.getHMAC(k, "HEX", "SHA-1", "B64");
         return helpers.stringToArray(CryptoJS.enc.Base64.parse(enc).toString(CryptoJS.enc.Latin1));
-    }
-}
-
-export class FirefoxOSContacts implements platform.IContacts {
-    getContacts(): Array<platform.Contact> {
-        return new Array<platform.Contact>();
     }
 }
 
