@@ -33,6 +33,11 @@ export class NodeCrypto implements platform.ICrypto {
         var enc = shaObj.getHMAC(k, "HEX", "SHA-1", "B64");
         return helpers.stringToArray(CryptoJS.enc.Base64.parse(enc).toString(CryptoJS.enc.Latin1));
     }
+    
+    decodeUTF8(data: Uint8Array): string {
+        var str = helpers.arrayToString(data);
+        return CryptoJS.enc.Latin1.parse(str).toString(CryptoJS.enc.Utf8);
+    }
 }
 
 export class NodeSocket implements platform.ISocket {

@@ -499,6 +499,7 @@ declare module "crypto-js" {
 
     module enc {
         export var Latin1: CryptoJS.enc.ICoder;
+        export var Utf8: CryptoJS.enc.ICoder;
         export var Base64: CryptoJS.enc.ICoder;
         export var Hex: CryptoJS.enc.ICoder;
     }

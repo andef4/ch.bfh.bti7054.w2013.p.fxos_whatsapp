@@ -1,6 +1,7 @@
 export interface ICrypto {
     PBKDF2(password: string, salt: string, keySize: number, iterations: number): string;
-    HmacSHA1(key: string, data: Uint8Array);
+    HmacSHA1(key: string, data: Uint8Array): Uint8Array;
+    decodeUTF8(data: Uint8Array): string;
 }
 
 export interface ISocket {
