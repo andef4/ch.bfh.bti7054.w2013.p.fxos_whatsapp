@@ -51,7 +51,7 @@ class Client {
         }
         
         this.connection.onconnect = () => {
-            this.fetch_contacts();
+            this.fetchContacts();
         }
     }
     
