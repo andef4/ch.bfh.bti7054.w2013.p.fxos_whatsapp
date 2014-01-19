@@ -11,6 +11,8 @@ function addStringToArray(arr: Array<number>, str: string): void {
     }
 }
 
+// generate the authBlob containing the username, the nonce(salt) sent from the server and the current date
+// the authBlob is encrypted using the same outgoing KeyStream as the other sent packages
 export function authBlob(username: string, nonce: string): Uint8Array {
     var nums: number[] = [];
     addStringToArray(nums, username);
@@ -27,6 +29,8 @@ export function authBlob(username: string, nonce: string): Uint8Array {
     return array;
 }
 
+// a stream cipher for encrypt outgoing and decrypt ingoing packets
+// uses rc4 and hmac_sha1
 export class KeyStream {
     private crypto: platform.ICrypto;
     private rc4: RC4Drop;
@@ -57,7 +61,7 @@ export class KeyStream {
     }
 }
 
-
+// RC4 Stream Cipher implementation with drop support
 export class RC4Drop {
     private i = 0;
     private j = 0;
@@ -108,5 +112,4 @@ export class RC4Drop {
         }
         return data;
     }
-    
 }

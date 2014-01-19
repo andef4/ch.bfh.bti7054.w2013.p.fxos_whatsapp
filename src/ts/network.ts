@@ -2,10 +2,10 @@ import constants = require("./constants");
 import helpers = require("./helpers");
 import security = require("./security");
 
+// a xmpp xml node
 export class Node {
     constructor(public name: string, public attrs: Object = {}, public childs: Node[] = [], public data: Uint8Array = null) {}
 }
-
 
 export class Packet {
     private packet: number[] = [];
@@ -151,7 +151,7 @@ export class Packet {
     }
 }
 
-// read packets
+// read a stream of packets
 export function parsePackets(inKeyStream: security.KeyStream, data: Uint8Array): Array<Uint8Array> {
     var i = 0;
     var packets = new Array<Uint8Array>();
@@ -171,6 +171,7 @@ export function parsePackets(inKeyStream: security.KeyStream, data: Uint8Array):
     return packets;
 }
 
+// deserialize a single packet
 export class PacketReader {
     private currentIndex = 0;
     private inputKey: string = null;
@@ -284,8 +285,4 @@ export class PacketReader {
         }
         return childs;
     }
-
 }
-
-
-

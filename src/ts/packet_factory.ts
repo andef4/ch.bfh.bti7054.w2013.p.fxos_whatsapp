@@ -53,6 +53,7 @@ export function challengePacket(authBlob: Uint8Array): network.Packet {
     return packet;
 }
 
+// a text message to another
 export function messageChatPacket(to: string, message: string, msgId: string): network.Packet {
     var packet = new network.Packet();
     
@@ -65,6 +66,7 @@ export function messageChatPacket(to: string, message: string, msgId: string): n
     return packet;
 }
 
+// acknowledge a received message packet
 export function messageAck(to: string, msgId: string) {
     var packet = new network.Packet();
     var received = new network.Node("received", {xmlns: "urn:xmpp:receipts"});

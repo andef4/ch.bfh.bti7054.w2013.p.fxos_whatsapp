@@ -79,15 +79,11 @@ export class WhatsAppConnection {
         this.state = ConnectionState.CONNECTED;
     }
     
-    connect():void {
+    connect(): void {
         this.socket = this.platform.getSocket();
         this.socket.onconnect = () => { this.onSocketConnect(); };
         this.socket.ondata = (data: Uint8Array) => { this.onSocketData(data); };
         this.socket.connect(constants.HOST, constants.PORT);
-    }
-    
-    fetchContacts(): void {
-        
     }
     
     sendMessage(to: string, message: string): void {

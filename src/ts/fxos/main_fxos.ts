@@ -44,7 +44,7 @@ class Client {
             
             if (this.current_page == Page.CONTACTS) {
                 this.contacts[tel].unread_messages = true;
-                this.render_contacts();
+                this.renderContacts();
             } else if (this.current_page == Page.CHAT && $("#send-button").attr("data-tel") == tel) {
                 $(".container").append($('<div class="message in">' + message + '</div>'));
             }
@@ -59,7 +59,7 @@ class Client {
         this.connection.connect();
     }
     
-    fetch_contacts() {
+    fetchContacts() {
         var request = navigator.mozContacts.getAll({sortBy: "givenName", sortOrder: "descending"});
         request.onsuccess = (event) => {
             
@@ -70,19 +70,19 @@ class Client {
                 this.contacts[tel] = {name: name, messages: [], unread_messages: false};
                 cursor.continue();
             } else {
-                this.render_contacts();
+                this.renderContacts();
             }
         }
     }
     
-    render_login() {
+    renderLogin() {
         $("#page").html(this.login_template());
         $(".navbar-brand").html("WhatsApp");
         this.current_page = Page.LOGIN;
         init();
     }
     
-    render_contacts() {
+    renderContacts() {
         var context = {
             contacts: this.contacts
         };
@@ -92,14 +92,14 @@ class Client {
         init();
     }
     
-    render_connecting() {
+    renderConnecting() {
         $("#page").html(this.connecting_template());
         $(".navbar-brand").html("WhatsApp");
         this.current_page = Page.CONNECTING;
         init();
     }
     
-    render_chat(tel: string) {
+    renderChat(tel: string) {
         this.contacts[tel].unread_messages = false;
         var context = {
             messages: this.contacts[tel].messages,
@@ -123,12 +123,12 @@ var client: Client;
 
 $(document).ready(() => {
     client = new Client();
-    client.render_login();
+    client.renderLogin();
     init();
 });
 
 function showContacts() {
-    client.render_contacts();
+    client.renderContacts();
 }
 
 function scrollToBottom() {
@@ -137,17 +137,17 @@ function scrollToBottom() {
 
 function init() {
     $("#login-button").on('click', () => {
-        client.render_connecting();
+        client.renderConnecting();
         client.connect();
     });
     
     $(".contact-button").on("click", function() {
         var tel = $(this).attr("data-tel");
-        client.render_chat(tel);
+        client.renderChat(tel);
     });
     
     $('.navbar-brand').on("click", () => {
-        client.render_contacts();
+        client.renderContacts();
     });
     
     $("#send-button").on("click", () => {
