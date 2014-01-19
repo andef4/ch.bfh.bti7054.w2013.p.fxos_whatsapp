@@ -53,13 +53,13 @@ export function challengePacket(authBlob: Uint8Array): network.Packet {
     return packet;
 }
 
-// a text message to another
-export function messageChatPacket(to: string, message: string, msgId: string): network.Packet {
+// a text message (utf-8 encoded) to another user
+export function messageChatPacket(to: string, message: Uint8Array, msgId: string): network.Packet {
     var packet = new network.Packet();
     
     var server = new network.Node("server");
     var x = new network.Node("x", {"xmlns":"jabber:x:event"}, [server]);
-    var body = new network.Node("body", {}, [], helpers.stringToArray(message));
+    var body = new network.Node("body", {}, [], message);
     var xml = new network.Node("message", {"to": to, "type": "chat", "id": msgId}, [body, x]);
     
     packet.writeBinaryXml(xml);

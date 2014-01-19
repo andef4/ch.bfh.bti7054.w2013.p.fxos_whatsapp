@@ -38,6 +38,10 @@ export class NodeCrypto implements platform.ICrypto {
         var str = helpers.arrayToString(data);
         return CryptoJS.enc.Latin1.parse(str).toString(CryptoJS.enc.Utf8);
     }
+    
+    encodeUTF8(str: string): Uint8Array {
+        return helpers.stringToArray(CryptoJS.enc.Utf8.parse(str).toString(CryptoJS.enc.Latin1));
+    }
 }
 
 export class NodeSocket implements platform.ISocket {

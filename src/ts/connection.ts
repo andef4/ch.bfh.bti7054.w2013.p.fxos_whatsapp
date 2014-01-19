@@ -55,7 +55,7 @@ export class WhatsAppConnection {
                     this.socket.write(ackPacket.serialize(this.outKeyStream));
                     xml.childs.forEach((child: network.Node) => {
                         if (child.name == "body") {
-                            this.onmessage(xml.attrs["from"], helpers.arrayToString(child.data));
+                            this.onmessage(xml.attrs["from"], this.platform.getCrypto().decodeUTF8(child.data));
                         }
                     });
                 }
@@ -92,7 +92,8 @@ export class WhatsAppConnection {
         messageId += this.currentMessageId;
         this.currentMessageId++;
         
-        var packet = packet_factory.messageChatPacket(to, message, messageId);
+        var encodedMessage = this.platform.getCrypto().encodeUTF8(message);
+        var packet = packet_factory.messageChatPacket(to, encodedMessage, messageId);
         this.socket.write(packet.serialize(this.outKeyStream));
     }
 }
